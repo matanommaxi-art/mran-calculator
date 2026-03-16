@@ -218,6 +218,40 @@ body {
 .track-input{background:transparent!important;border:none!important;border-bottom:1.5px solid var(--line2)!important;border-radius:0!important;padding:2px 4px!important;font-family:var(--mono)!important;font-size:11px!important;color:var(--text3)!important;width:140px!important;outline:none!important;}
 .track-input:focus{border-bottom-color:var(--navy)!important;box-shadow:none!important;}
 
+/* ── CURRENCY TOGGLE ── */
+.currency-toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--card2); border: 1px solid var(--line2);
+  border-radius: var(--r-sm); padding: 10px 14px;
+}
+.currency-toggle-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text2);
+}
+.currency-toggle-group {
+  display: flex; background: var(--line); border-radius: 7px; padding: 3px; gap: 2px;
+}
+.currency-btn {
+  padding: 5px 16px; border: none; border-radius: 5px;
+  font-family: var(--ffc); font-size: 13px; font-weight: 700;
+  letter-spacing: 0.06em; cursor: pointer;
+  background: transparent; color: var(--text3);
+  transition: background 0.18s, color 0.18s;
+}
+.currency-btn.active { background: var(--navy); color: #fff; box-shadow: 0 2px 6px rgba(13,31,60,0.2); }
+
+/* ── PRINT QUOTE BUTTON ── */
+.print-quote-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; margin-top: 14px; padding: 12px;
+  background: transparent; border: 1.5px solid var(--navy); border-radius: var(--r-sm);
+  font-family: var(--ffc); font-size: 14px; font-weight: 700;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--navy); cursor: pointer; transition: background 0.18s, color 0.18s;
+}
+.print-quote-btn svg { width: 16px; height: 16px; }
+.print-quote-btn:hover { background: var(--navy); color: #fff; }
+
 /* tracking tooltip */
 .trk-wrap { position: relative; display: inline-block; }
 .trk-tooltip {
@@ -640,11 +674,21 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
     <div class="card-title">Calculate Shipping Cost</div>
   </div>
   <div class="card-body">
-    <div class="field" style="margin-bottom:18px;">
+    <div class="field" style="margin-bottom:14px;">
       <div class="field-label">Client Name</div>
       <div class="input-shell"><input type="text" id="clientName" placeholder="Enter your full name" oninput="syncName()"/></div>
     </div>
-    <div style="margin-bottom:18px;">
+
+    <!-- Currency Toggle -->
+    <div class="currency-toggle-row">
+      <span class="currency-toggle-label">Display Currency</span>
+      <div class="currency-toggle-group">
+        <button class="currency-btn active" id="btnKES" onclick="setCurrency('KES')">KES</button>
+        <button class="currency-btn" id="btnUSD" onclick="setCurrency('USD')">USD</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:18px;margin-top:18px;">
       <div class="field-label" style="margin-bottom:10px;">Packages</div>
       <div class="packages" id="pkgList"></div>
       <button class="add-pkg-btn" onclick="addPackage()">
@@ -671,9 +715,14 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
         <div class="r-row"><div class="r-key"><div class="dot o"></div>Customs clearance</div><div class="r-val" id="r-customs">—</div></div>
         <div class="r-row"><div class="r-key"><div class="dot g"></div>Home delivery</div><div class="r-val" id="r-del">—</div></div>
         <div class="total-block">
-          <div class="total-usd"><div class="total-usd-label">Total (USD)</div><div class="total-usd-val" id="r-usd">—</div></div>
-          <div class="total-kes"><div class="total-kes-label"><span>Total Amount</span><span>Kenyan Shillings</span></div><div class="total-kes-val" id="r-kes">—</div></div>
+          <div class="total-usd" id="totalUsdRow"><div class="total-usd-label">Total (USD)</div><div class="total-usd-val" id="r-usd">—</div></div>
+          <div class="total-kes" id="totalKesRow"><div class="total-kes-label"><span>Total Amount</span><span>Kenyan Shillings</span></div><div class="total-kes-val" id="r-kes">—</div></div>
         </div>
+        <!-- Print Quote Button -->
+        <button class="print-quote-btn" onclick="printQuote()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Download / Print Quote
+        </button>
       </div>
     </div>
 
@@ -896,6 +945,124 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
 </div>
 
 <script>
+/* ── CURRENCY ── */
+let activeCurrency = 'KES';
+let lastTotalUsd = 0;
+let lastTotalKes = 0;
+
+function setCurrency(c) {
+  activeCurrency = c;
+  document.getElementById('btnKES').classList.toggle('active', c === 'KES');
+  document.getElementById('btnUSD').classList.toggle('active', c === 'USD');
+  document.getElementById('totalUsdRow').style.display = c === 'USD' ? 'flex' : 'none';
+  document.getElementById('totalKesRow').style.display = c === 'KES' ? 'flex' : 'none';
+}
+
+/* ── PRINT QUOTE ── */
+function printQuote() {
+  const client = document.getElementById('clientName').value.trim() || 'Client';
+  const date = new Date().toLocaleDateString('en-KE', { year:'numeric', month:'long', day:'numeric' });
+  const rows = document.querySelectorAll('.pkg-result-card');
+  let pkgHTML = '';
+  rows.forEach((r, i) => {
+    const label = r.querySelector('.pkg-result-label')?.textContent || ('Package ' + (i+1));
+    const items = r.querySelectorAll('.prg-item');
+    let cells = '';
+    items.forEach(it => {
+      const l = it.querySelector('.prg-l')?.textContent || '';
+      const v = it.querySelector('.prg-v')?.textContent || '';
+      cells += `<td style="padding:8px 14px;border-bottom:1px solid #e8eef5;font-size:13px;color:#2f4a6e;">${l}</td><td style="padding:8px 14px;border-bottom:1px solid #e8eef5;font-size:13px;font-weight:700;color:#0d1f3c;font-family:monospace;">${v}</td>`;
+    });
+    pkgHTML += `
+      <tr><td colspan="2" style="padding:10px 14px 6px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#e8620a;background:#fdf6f2;">${label}</td></tr>
+      <tr>${cells}</tr>`;
+  });
+
+  const customs = document.getElementById('r-customs').textContent;
+  const delivery = document.getElementById('r-del').textContent;
+  const usd = document.getElementById('r-usd').textContent;
+  const kes = document.getElementById('r-kes').textContent;
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+  <title>MRAN Logistics — Shipping Quote</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f7fc;padding:32px;}
+    .page{max-width:640px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(13,31,60,0.1);}
+    .hdr{background:#0d1f3c;padding:28px 32px;display:flex;align-items:center;gap:16px;}
+    .hdr-logo{font-size:28px;font-weight:800;color:#fff;letter-spacing:0.06em;}
+    .hdr-logo span{color:#f07420;}
+    .hdr-sub{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-top:3px;}
+    .stripe{height:4px;background:linear-gradient(90deg,#e8620a,#f07420,transparent);}
+    .body{padding:28px 32px;}
+    .meta{display:flex;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #e8eef5;}
+    .meta-label{font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#7a98bc;margin-bottom:4px;}
+    .meta-val{font-size:16px;font-weight:700;color:#0d1f3c;}
+    .meta-val.sm{font-size:13px;}
+    .section-title{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#4a6a92;margin-bottom:10px;margin-top:20px;}
+    table{width:100%;border-collapse:collapse;border:1px solid #e8eef5;border-radius:8px;overflow:hidden;}
+    .summary-row td{padding:10px 14px;border-bottom:1px solid #e8eef5;font-size:13px;}
+    .summary-row td:first-child{color:#4a6a92;}
+    .summary-row td:last-child{font-weight:700;color:#0d1f3c;text-align:right;font-family:monospace;}
+    .total-usd{background:#f0f4ff;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;}
+    .total-usd span:first-child{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#4a6a92;}
+    .total-usd span:last-child{font-family:monospace;font-size:16px;font-weight:700;color:#0d1f3c;}
+    .total-kes{background:#0d1f3c;padding:16px 14px;display:flex;justify-content:space-between;align-items:center;}
+    .total-kes span:first-child{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5);}
+    .total-kes span:last-child{font-family:monospace;font-size:24px;font-weight:700;color:#fff;}
+    .foot{margin-top:24px;padding-top:16px;border-top:1px solid #e8eef5;font-size:11px;color:#a0b4c8;text-align:center;line-height:1.7;}
+    .est-badge{display:inline-block;background:#fff3ed;color:#e8620a;border:1px solid #f5c4a0;border-radius:4px;padding:2px 10px;font-size:9px;font-weight:700;letter-spacing:0.1em;margin-left:8px;vertical-align:middle;}
+    @media print{body{padding:0;background:#fff;}.page{box-shadow:none;border-radius:0;}}
+  </style></head><body>
+  <div class="page">
+    <div class="hdr">
+      <div>
+        <div class="hdr-logo">MRAN <span>LOGISTICS</span></div>
+        <div class="hdr-sub">Air Freight Shipping Quote</div>
+      </div>
+    </div>
+    <div class="stripe"></div>
+    <div class="body">
+      <div class="meta">
+        <div><div class="meta-label">Prepared For</div><div class="meta-val">${client}</div></div>
+        <div style="text-align:right;"><div class="meta-label">Quote Date</div><div class="meta-val sm">${date}</div></div>
+      </div>
+      <div class="section-title">Package Breakdown <span class="est-badge">ESTIMATE</span></div>
+      <table>${pkgHTML}
+        <tr class="summary-row"><td>Customs Clearance</td><td>${customs}</td></tr>
+        <tr class="summary-row"><td>Home Delivery</td><td>${delivery}</td></tr>
+      </table>
+      <div class="total-usd"><span>Total (USD)</span><span>${usd}</span></div>
+      <div class="total-kes"><span>Total Amount (KES)</span><span>${kes}</span></div>
+      <div class="foot">
+        MRAN Logistics · 17401 Nichols Ln Ste J, Huntington Beach, CA 92647<br>
+        +1 657 215 7361 · +254 725 041 080<br>
+        This is an estimate only. Final charges may vary based on actual measurements at our warehouse.
+      </div>
+    </div>
+  </div>
+  <script>window.onload=function(){window.print();}<\/script>
+  </body></html>`;
+
+  let iframe = document.getElementById('printFrame');
+  if (!iframe) {
+    iframe = document.createElement('iframe');
+    iframe.id = 'printFrame';
+    iframe.style.cssText = 'position:fixed;top:-9999px;left:-9999px;width:800px;height:600px;border:none;';
+    document.body.appendChild(iframe);
+  }
+  iframe.srcdoc = html;
+  iframe.onload = function() {
+    try {
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+    } catch(e) {
+      const w = window.open('', '_blank');
+      if (w) { w.document.write(html); w.document.close(); }
+    }
+  };
+}
+
 /* ── TAB SWITCHER ── */
 function switchTab(tab) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1036,6 +1203,9 @@ function calculate() {
   document.getElementById('r-del').textContent=hasDeliv?'KES 450':'Not included';
   document.getElementById('r-usd').textContent='$'+totalUsd.toFixed(2);
   document.getElementById('r-kes').textContent='KES '+fmt(totalKes);
+  lastTotalUsd = totalUsd;
+  lastTotalKes = totalKes;
+  setCurrency(activeCurrency);
   resultsWrap.classList.add('show');
   document.getElementById('consolBanner').style.display='block';
   setTimeout(()=>resultsWrap.scrollIntoView({behavior:'smooth',block:'nearest'}),60);
@@ -1084,6 +1254,7 @@ function copyOceanAddr() {
 
 /* ── INIT ── */
 addPackage();
+setCurrency('KES');
 </script>
 </body>
 </html>
