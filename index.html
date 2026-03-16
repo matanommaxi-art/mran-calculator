@@ -217,6 +217,39 @@ body {
 .pkg-num{background:var(--navy);color:#fff;border-radius:5px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:500;}
 .track-input{background:transparent!important;border:none!important;border-bottom:1.5px solid var(--line2)!important;border-radius:0!important;padding:2px 4px!important;font-family:var(--mono)!important;font-size:11px!important;color:var(--text3)!important;width:140px!important;outline:none!important;}
 .track-input:focus{border-bottom-color:var(--navy)!important;box-shadow:none!important;}
+
+/* tracking tooltip */
+.trk-wrap { position: relative; display: inline-block; }
+.trk-tooltip {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 320px;
+  background: var(--navy);
+  border: 1px solid var(--navy3);
+  border-left: 3px solid var(--orange);
+  border-radius: var(--r-sm);
+  padding: 14px;
+  z-index: 500;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  animation: slideUp 0.18s ease;
+}
+.trk-wrap:hover .trk-tooltip,
+.trk-wrap:focus-within .trk-tooltip { display: block; }
+.trk-tip-title {
+  font-family: var(--ffc); font-size: 12px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--orange2); margin-bottom: 8px;
+}
+.trk-tip-body {
+  font-size: 11px; color: rgba(255,255,255,0.65);
+  line-height: 1.65;
+}
+.trk-tip-body strong { color: rgba(255,255,255,0.9); }
+.trk-tip-body u { color: var(--orange2); text-decoration: none; font-weight: 700; }
+.trk-tip-body em { color: var(--orange2); font-style: normal; font-weight: 600; }
+@media(max-width:520px){ .trk-tooltip { width: 260px; } }
 .remove-pkg{width:26px;height:26px;border-radius:6px;background:var(--red-dim);border:1px solid rgba(211,47,47,0.15);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--red);font-size:17px;line-height:1;transition:background 0.15s;}
 .remove-pkg:hover{background:rgba(211,47,47,0.18);}
 .add-pkg-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:10px;background:transparent;border:1.5px dashed var(--line2);border-radius:var(--r-sm);color:var(--text3);font-family:var(--ff);font-size:13px;font-weight:600;cursor:pointer;transition:border-color 0.18s,color 0.18s;margin-top:4px;}
@@ -721,7 +754,32 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
       <div class="ocean-eyebrow">Ocean Freight to Kenya</div>
       <h1 class="ocean-h1">Ship Heavy &amp; Bulky Items<span class="accent">At Affordable Rates</span></h1>
       <p class="ocean-sub">Use our U.S. address, ship to our warehouse, and we deliver by ocean freight — all-inclusive pricing with customs clearance, no hidden fees.</p>
-      <a href="https://wa.me/254725041080?text=Hello%20MRAN%20Logistics%2C%20I%20would%20like%20to%20get%20our%20US%20shipping%20address." target="_blank" class="ocean-cta">Get Our U.S. Address →</a>
+      <button class="ocean-cta" onclick="toggleOceanAddr()">Get Our U.S. Address →</button>
+
+      <!-- Revealed address block -->
+      <div id="oceanAddrReveal" style="display:none;margin-top:20px;max-width:420px;animation:slideUp 0.25s ease;">
+        <div class="addr-block">
+          <div class="addr-header" style="background:var(--sea);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+            MRAN Logistics — US Warehouse
+          </div>
+          <div class="addr-grid" style="background:#fff;">
+            <div class="al">Attn</div><div class="av highlight">MRAN Logistics — <em style="color:var(--sea);">[Your Name]</em></div>
+            <div class="al">Address</div><div class="av">17401 Nichols Ln Ste J</div>
+            <div class="al">City</div><div class="av">Huntington Beach</div>
+            <div class="al">State / ZIP</div><div class="av">California 92647</div>
+            <div class="al">Country</div><div class="av">United States</div>
+            <div class="al">Phone</div><div class="av" style="font-family:var(--mono)">+1 657 215 7361</div>
+          </div>
+          <button class="copy-btn" id="oceanCopyBtn" onclick="copyOceanAddr()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+            Copy Full Address
+          </button>
+        </div>
+        <div style="margin-top:10px;font-size:12px;color:var(--fog);line-height:1.6;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--r-sm);padding:10px 14px;">
+          ⚠️ Always include <strong style="color:#fff;">MRAN Logistics</strong> and your name in the "Ship To" field. Add your tracking or order number as a reference so we can identify your package on arrival.
+        </div>
+      </div>
     </div>
     <div class="ocean-hero-right">
       <div class="ocean-rings"><div class="oring"></div><div class="oring"></div><div class="oring"></div><div class="oring"></div></div>
@@ -869,7 +927,17 @@ function addPackage() {
       <div style="display:flex;align-items:center;gap:10px;">
         <div style="display:flex;align-items:center;gap:5px;">
           <span style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;">Tracking #</span>
-          <input class="track-input" type="text" id="trk-${id}" placeholder="Optional tracking no."/>
+          <div class="trk-wrap">
+            <input class="track-input" type="text" id="trk-${id}" placeholder="Optional tracking no."/>
+            <div class="trk-tooltip">
+              <div class="trk-tip-title">📋 Important — Please Read</div>
+              <div class="trk-tip-body">
+                <strong>COPY/PASTE</strong> your tracking number here instead of typing it in. If the tracking number is wrong, we will not be able to confirm receipt of your package.<br><br>
+                Put <strong>ONE tracking number only</strong> in this box. If you put more than one, our barcode scanning system will not be able to read them correctly. To add additional tracking numbers, click <em>Add Another Package</em> below.<br><br>
+                <strong>NOTE:</strong> The tracking number is <u>NOT</u> the order number. Tracking numbers are issued by courier companies such as UPS, FedEx, DHL, OnTrac, or USPS. Some Amazon tracking numbers begin with <strong>TBA</strong>. Tracking numbers have <strong>no dashes or symbols</strong> — only numbers and some letters. Contact the seller if unsure.
+              </div>
+            </div>
+          </div>
         </div>
         ${id > 1 ? `<div class="remove-pkg" onclick="removePkg(${id})" title="Remove">×</div>` : ''}
       </div>
@@ -992,6 +1060,27 @@ function oceanCalc() {
 ['olen','owid','ohgt'].forEach(id=>{
   document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')oceanCalc();});
 });
+
+function toggleOceanAddr() {
+  const reveal = document.getElementById('oceanAddrReveal');
+  const btn = document.querySelector('.ocean-cta');
+  const isHidden = reveal.style.display === 'none';
+  reveal.style.display = isHidden ? 'block' : 'none';
+  btn.textContent = isHidden ? 'Hide Address ↑' : 'Get Our U.S. Address →';
+}
+
+function copyOceanAddr() {
+  const text = `MRAN Logistics — [Your Name]\n17401 Nichols Ln Ste J\nHuntington Beach, CA 92647\nUnited States\nPhone: +1 657 215 7361`;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('oceanCopyBtn');
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Copied to Clipboard!`;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Full Address`;
+    }, 2500);
+  });
+}
 
 /* ── INIT ── */
 addPackage();
