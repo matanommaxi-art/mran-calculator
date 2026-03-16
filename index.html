@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MRAN Logistics – Air Freight Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:       #0d1f3c;
+  --navy2:      #122347;
+  --navy3:      #172c57;
+  --navy4:      #1d3568;
+  --navy-light: #2a4a82;
+  --orange:     #e8620a;
+  --orange2:    #f07420;
+  --orange-dim: rgba(232,98,10,0.12);
+  --orange-glow:rgba(232,98,10,0.25);
+  --red-ke:     #b71c1c;
+  --green-ke:   #1b5e20;
+  --white:      #ffffff;
+  --off-white:  #f4f7fc;
+  --text:       #1a2e4a;
+  --text2:      #2f4a6e;
+  --text3:      #4a6a92;
+  --muted:      #7a98bc;
+  --line:       #d4e2f0;
+  --line2:      #c0d4e8;
+  --bg:         #eef4fa;
+  --card:       #ffffff;
+  --card2:      #f7faff;
+  --red:        #d32f2f;
+  --red-dim:    rgba(211,47,47,0.08);
+  --amber:      #f59e0b;
+  --amber-dim:  rgba(245,158,11,0.1);
+  --green:      #16a34a;
+  --green-dim:  rgba(22,163,74,0.1);
+  --wa:         #25d366;
+  --ff:         'Barlow', sans-serif;
+  --ffc:        'Barlow Condensed', sans-serif;
+  --mono:       'JetBrains Mono', monospace;
+  --r:          14px;
+  --r-sm:       9px;
+  --shadow:     0 2px 16px rgba(13,31,60,0.10), 0 1px 4px rgba(13,31,60,0.07);
+  --shadow-lg:  0 8px 40px rgba(13,31,60,0.14), 0 2px 8px rgba(13,31,60,0.08);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--ff);
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+/* ─── TOP NAV BAR ─── */
+.topbar {
+  background: var(--navy);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+.topbar-left {
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--ffc);
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.topbar-divider {
+  width: 1px; height: 16px;
+  background: rgba(255,255,255,0.15);
+}
+
+.topbar-right {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: rgba(255,255,255,0.5);
+}
+
+.topbar-phone {
+  color: var(--orange2);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ─── HERO ─── */
+.hero {
+  background: linear-gradient(160deg, var(--navy) 0%, var(--navy2) 55%, #0e2040 100%);
+  padding: 40px 20px 36px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 3px solid var(--orange);
+}
+
+/* subtle wave pattern */
+.hero::before {
+  content:'';
+  position:absolute; inset:0;
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 1px,
+      transparent 1px, transparent 20px
+    );
+  pointer-events:none;
+}
+
+/* Kenya flag colours accent bar */
+.hero::after {
+  content:'';
+  position:absolute;
+  bottom:0; left:0; right:0;
+  height:3px;
+  background: linear-gradient(90deg,
+    var(--green-ke) 0%, var(--green-ke) 33%,
+    #fff 33%, #fff 37%,
+    var(--red-ke) 37%, var(--red-ke) 63%,
+    #fff 63%, #fff 67%,
+    var(--green-ke) 67%, var(--green-ke) 100%
+  );
+  opacity: 0.7;
+}
+
+/* SVG Logo mark */
+.logo-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 16px;
+}
+
+.logo-svg-block {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+}
+
+/* The MRAN box logo */
+.logo-box {
+  width: 82px; height: 64px;
+  position: relative;
+}
+
+.logo-box svg { width:100%; height:100%; }
+
+.logo-name-block {
+  margin-left: 10px;
+  text-align: left;
+}
+
+.logo-mran {
+  font-family: var(--ffc);
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: 0.06em;
+  line-height: 1;
+}
+
+.logo-logistics {
+  font-family: var(--ffc);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+  color: var(--orange2);
+  text-transform: uppercase;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  padding-top: 3px;
+  margin-top: 2px;
+  display: flex; align-items: center; gap: 6px;
+}
+
+.logo-dash { flex:1; height:1px; background:var(--orange); opacity:0.5; }
+
+.hero-title {
+  font-family: var(--ffc);
+  font-size: 22px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.hero-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  max-width: 400px;
+  margin: 0 auto 16px;
+  line-height: 1.6;
+}
+
+.hero-pills {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; flex-wrap: wrap;
+}
+
+.hpill {
+  display: flex; align-items: center; gap: 5px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.55);
+  font-weight: 500;
+}
+.hpill-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.hpill-dot.g { background:var(--wa); box-shadow:0 0 5px var(--wa); animation:pulse 2s infinite; }
+.hpill-dot.o { background:var(--orange2); }
+.hpill-dot.b { background:#60a5fa; }
+
+@keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
+
+/* ─── LAYOUT ─── */
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ─── CARDS ─── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.card-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 20px;
+  background: var(--navy);
+  border-bottom: 2px solid var(--orange);
+}
+
+.card-icon {
+  width: 28px; height: 28px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; background: rgba(255,255,255,0.08);
+}
+.card-icon svg { width: 14px; height: 14px; }
+
+.card-title {
+  font-family: var(--ffc);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--white);
+  flex: 1;
+}
+
+.card-body { padding: 22px; }
+
+/* ─── HOW IT WORKS ─── */
+.steps { display:flex; flex-direction:column; gap:0; }
+
+.step {
+  display: flex; gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.step:last-child { border: none; }
+
+.step-num {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  color: var(--white); flex-shrink: 0; margin-top: 1px;
+}
+
+.step-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.step-desc { font-size: 13px; color: var(--text3); line-height: 1.6; }
+
+.step-formula {
+  display: inline-block; margin-top: 7px;
+  background: var(--navy); border-radius: 6px;
+  padding: 5px 12px;
+  font-family: var(--mono); font-size: 12px; color: var(--orange2);
+}
+
+.rate-banner {
+  display: flex; flex-wrap: wrap; gap: 0;
+  background: var(--navy); border-radius: var(--r-sm);
+  overflow: hidden; margin-top: 18px;
+  border: 1px solid var(--navy3);
+}
+
+.rb-item {
+  flex: 1; min-width: 120px;
+  padding: 12px 16px;
+  display: flex; flex-direction: column; gap: 3px;
+  border-right: 1px solid rgba(255,255,255,0.07);
+}
+.rb-item:last-child { border-right: none; }
+.rb-label { font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.4); font-weight: 600; }
+.rb-val { font-family: var(--mono); font-size: 15px; font-weight: 500; color: var(--orange2); }
+.rb-val.w { color: #fff; }
+.rb-val.t { color: var(--wa); }
+
+/* ─── FORM ─── */
+.field-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text2); margin-bottom: 6px;
+}
+
+.input-shell { position: relative; }
+
+.input-shell input[type=text],
+.input-shell input[type=number],
+.input-shell input[type=tel] {
+  width: 100%;
+  background: var(--off-white);
+  border: 1.5px solid var(--line2);
+  border-radius: var(--r-sm);
+  padding: 11px 38px 11px 13px;
+  font-family: var(--ff); font-size: 14px;
+  color: var(--text); outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  -moz-appearance: textfield;
+}
+.input-shell input::-webkit-inner-spin-button,
+.input-shell input::-webkit-outer-spin-button { -webkit-appearance:none; }
+.input-shell input::placeholder { color: var(--muted); font-size: 13px; }
+.input-shell input:focus {
+  border-color: var(--navy);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(13,31,60,0.08);
+}
+
+.input-unit {
+  position: absolute; right: 11px; top: 50%; transform: translateY(-50%);
+  font-family: var(--mono); font-size: 10px; color: var(--muted);
+  pointer-events: none;
+}
+
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { display: flex; flex-direction: column; }
+
+/* ─── PACKAGES ─── */
+.packages { display: flex; flex-direction: column; gap: 12px; margin-bottom: 4px; }
+
+.pkg-row {
+  background: var(--card2);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 16px;
+  border-left: 3px solid var(--navy);
+}
+
+.pkg-row-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.pkg-label {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--ffc); font-size: 13px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; color: var(--navy);
+}
+
+.pkg-num {
+  background: var(--navy);
+  color: #fff;
+  border-radius: 5px;
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 500;
+}
+
+.track-input {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1.5px solid var(--line2) !important;
+  border-radius: 0 !important;
+  padding: 2px 4px !important;
+  font-family: var(--mono) !important;
+  font-size: 11px !important;
+  color: var(--text3) !important;
+  width: 140px !important;
+  outline: none !important;
+}
+.track-input:focus { border-bottom-color: var(--navy) !important; box-shadow: none !important; }
+.track-input::placeholder { font-size: 10px !important; }
+
+.remove-pkg {
+  width: 26px; height: 26px; border-radius: 6px;
+  background: var(--red-dim); border: 1px solid rgba(211,47,47,0.15);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--red); font-size: 17px; line-height: 1;
+  transition: background 0.15s;
+}
+.remove-pkg:hover { background: rgba(211,47,47,0.18); }
+
+.add-pkg-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 10px;
+  background: transparent;
+  border: 1.5px dashed var(--line2);
+  border-radius: var(--r-sm);
+  color: var(--text3); font-family: var(--ff); font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: border-color 0.18s, color 0.18s;
+  margin-top: 4px;
+}
+.add-pkg-btn:hover { border-color: var(--navy); color: var(--navy); }
+.add-pkg-btn svg { width:15px; height:15px; }
+
+/* ─── DELIVERY TOGGLE ─── */
+.del-toggle {
+  background: var(--card2);
+  border: 1.5px solid var(--line2);
+  border-radius: var(--r-sm);
+  padding: 14px;
+  display: flex; align-items: center; gap: 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  user-select: none;
+  margin-top: 6px; margin-bottom: 18px;
+}
+.del-toggle.on {
+  border-color: rgba(22,163,74,0.4);
+  box-shadow: 0 0 0 3px var(--green-dim);
+}
+
+.del-icon {
+  width: 42px; height: 42px;
+  background: var(--navy); border-radius: 9px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.del-icon svg { width: 20px; height: 20px; }
+
+.del-info { flex: 1; }
+.del-title { font-size: 14px; font-weight: 700; color: var(--text); }
+.del-desc { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.del-price { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--text2); }
+
+.tog { width:42px; height:24px; background:var(--line2); border-radius:12px; position:relative; transition:background 0.2s; flex-shrink:0; }
+.tog::after { content:''; position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,0.2); transition:transform 0.2s; }
+.del-toggle.on .tog { background:var(--green); }
+.del-toggle.on .tog::after { transform:translateX(18px); }
+
+#homeDelivery { display:none; }
+
+/* ─── CALC BUTTON ─── */
+.calc-btn {
+  width: 100%; padding: 15px;
+  background: linear-gradient(135deg, var(--orange) 0%, #c4510a 100%);
+  border: none; border-radius: var(--r-sm);
+  font-family: var(--ffc); font-size: 16px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: #fff; cursor: pointer;
+  position: relative; overflow: hidden;
+  transition: transform 0.12s, box-shadow 0.2s;
+  box-shadow: 0 4px 18px var(--orange-glow);
+}
+.calc-btn::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 100%);
+}
+.calc-btn:hover { box-shadow: 0 6px 24px rgba(232,98,10,0.4); }
+.calc-btn:active { transform:scale(0.99); }
+
+/* ─── ERROR ─── */
+.err-box {
+  display:none; align-items:center; gap:8px;
+  background:var(--red-dim); border:1px solid rgba(211,47,47,0.25);
+  border-radius:var(--r-sm); padding:10px 12px;
+  margin-top:12px; font-size:13px; color:var(--red);
+}
+.err-box.show { display:flex; }
+.err-box svg { width:14px; height:14px; flex-shrink:0; }
+
+/* ─── RESULTS ─── */
+.results-wrap {
+  display:none; flex-direction:column;
+  margin-top:16px;
+  border: 1.5px solid var(--navy);
+  border-radius: var(--r);
+  overflow:hidden;
+  animation: slideUp 0.25s ease;
+}
+.results-wrap.show { display:flex; }
+
+@keyframes slideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+.results-hdr {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 18px;
+  background:var(--navy);
+}
+.results-hdr-title { font-family:var(--ffc); font-size:14px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#fff; }
+.est-tag { font-family:var(--mono); font-size:9px; background:var(--orange-dim); color:var(--orange2); border:1px solid var(--orange-glow); border-radius:4px; padding:2px 8px; letter-spacing:0.1em; }
+
+.results-body { padding:18px; background:var(--card); }
+
+.pkg-results { display:flex; flex-direction:column; gap:10px; margin-bottom:14px; }
+
+.pkg-result-card {
+  background:var(--card2); border:1px solid var(--line);
+  border-radius:var(--r-sm); padding:12px 14px;
+  border-left:3px solid var(--orange);
+}
+.pkg-result-label { font-family:var(--ffc); font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--navy); margin-bottom:10px; }
+.pkg-result-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+.prg-item { display:flex; flex-direction:column; gap:2px; }
+.prg-l { font-size:10px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); font-weight:600; }
+.prg-v { font-family:var(--mono); font-size:13px; font-weight:500; color:var(--text); }
+.prg-v.hl { color:var(--navy); font-weight:700; }
+
+.r-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:9px 0; border-bottom:1px solid var(--line);
+}
+.r-row:last-of-type { border:none; }
+.r-key { display:flex; align-items:center; gap:7px; font-size:13px; color:var(--text3); }
+.dot { width:6px; height:6px; border-radius:50%; background:var(--line2); flex-shrink:0; }
+.dot.o { background:var(--orange); }
+.dot.g { background:var(--green); }
+.dot.n { background:var(--navy); }
+.r-val { font-family:var(--mono); font-size:13px; color:var(--text); font-weight:500; }
+
+.total-block { margin-top:14px; border-radius:var(--r-sm); overflow:hidden; }
+.total-usd { display:flex; align-items:center; justify-content:space-between; background:var(--navy3); padding:11px 16px; }
+.total-usd-label { font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.5); }
+.total-usd-val { font-family:var(--mono); font-size:17px; color:#fff; font-weight:500; }
+.total-kes {
+  display:flex; align-items:center; justify-content:space-between;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+  padding:16px;
+}
+.total-kes-label { display:flex; flex-direction:column; gap:2px; }
+.total-kes-label span:first-child { font-family:var(--ffc); font-size:11px; font-weight:700; letter-spacing:0.14em; text-transform:uppercase; color:var(--orange2); }
+.total-kes-label span:last-child { font-size:11px; color:rgba(255,255,255,0.4); }
+.total-kes-val { font-family:var(--mono); font-size:30px; font-weight:500; color:#fff; letter-spacing:-0.02em; }
+
+/* ─── ADDRESS ─── */
+.addr-block {
+  background:var(--card2); border:1px solid var(--line2);
+  border-radius:var(--r-sm); overflow:hidden;
+}
+.addr-header {
+  display:flex; align-items:center; gap:8px;
+  padding:11px 14px;
+  background:var(--navy); font-family:var(--ffc);
+  font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--orange2);
+}
+.addr-header svg { width:14px; height:14px; }
+
+.addr-grid {
+  padding:16px;
+  display:grid; grid-template-columns:80px 1fr; gap:7px 12px;
+  align-items:start;
+}
+.al { font-size:11px; letter-spacing:0.07em; text-transform:uppercase; color:var(--muted); font-weight:600; padding-top:2px; }
+.av { font-size:14px; color:var(--text); font-weight:500; line-height:1.5; }
+.av.highlight { color:var(--navy); font-weight:700; }
+.av em { color:var(--orange); font-style:normal; }
+
+.copy-btn {
+  display:flex; align-items:center; gap:7px;
+  width:100%; padding:11px 14px;
+  background:transparent; border:none; border-top:1px solid var(--line);
+  color:var(--text3); font-family:var(--ff); font-size:13px; font-weight:600;
+  cursor:pointer; transition:color 0.15s, background 0.15s;
+}
+.copy-btn:hover { background:var(--off-white); color:var(--navy); }
+.copy-btn svg { width:14px; height:14px; }
+.copy-btn.copied { color:var(--green); }
+
+.addr-note {
+  margin-top:14px; font-size:12px; color:var(--text3); line-height:1.7;
+  background:rgba(13,31,60,0.04); border:1px solid var(--line);
+  border-radius:var(--r-sm); padding:12px 14px;
+}
+
+/* ─── PROHIBITED ─── */
+.prohib-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+
+.prohib-item {
+  display:flex; align-items:flex-start; gap:9px;
+  background:var(--red-dim); border:1px solid rgba(211,47,47,0.12);
+  border-radius:var(--r-sm); padding:10px 12px;
+}
+
+.prohib-x {
+  width:18px; height:18px; border-radius:50%;
+  background:var(--red); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:700; flex-shrink:0; margin-top:1px;
+}
+
+.prohib-text { font-size:12px; color:var(--text2); line-height:1.45; }
+
+.prohib-warn {
+  display:flex; align-items:flex-start; gap:10px;
+  background:var(--amber-dim); border:1px solid rgba(245,158,11,0.2);
+  border-radius:var(--r-sm); padding:13px 14px; margin-top:14px;
+}
+.prohib-warn svg { width:16px; height:16px; flex-shrink:0; margin-top:1px; color:var(--amber); }
+.prohib-warn-text { font-size:13px; color:var(--text2); line-height:1.6; }
+
+/* ─── WHATSAPP ─── */
+.wa-card {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+  border: 1px solid var(--navy3);
+  border-radius: var(--r);
+  padding: 26px;
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  box-shadow: var(--shadow-lg);
+}
+
+.wa-icon-wrap {
+  width:60px; height:60px; border-radius:15px;
+  background:rgba(37,211,102,0.15);
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.wa-icon-wrap svg { width:32px; height:32px; }
+
+.wa-info { flex:1; min-width:180px; }
+.wa-title { font-family:var(--ffc); font-size:20px; font-weight:700; color:#fff; letter-spacing:0.02em; margin-bottom:4px; }
+.wa-desc { font-size:13px; color:rgba(255,255,255,0.55); line-height:1.5; }
+
+.wa-btn {
+  display:inline-flex; align-items:center; gap:9px;
+  background:var(--wa); color:#fff; border:none; border-radius:10px;
+  padding:13px 22px; font-family:var(--ffc); font-size:15px; font-weight:700;
+  letter-spacing:0.05em;
+  cursor:pointer; text-decoration:none;
+  transition:background 0.18s, transform 0.12s;
+  box-shadow:0 4px 18px rgba(37,211,102,0.35);
+  white-space:nowrap;
+}
+.wa-btn:hover { background:#1da853; }
+.wa-btn:active { transform:scale(0.98); }
+.wa-btn svg { width:20px; height:20px; }
+
+/* ─── FOOTER ─── */
+.footer {
+  background: var(--navy);
+  margin-top: 32px;
+  padding: 20px 24px;
+  text-align: center;
+  border-top: 3px solid var(--orange);
+}
+.footer-brand {
+  font-family: var(--ffc);
+  font-size: 16px; font-weight: 800; letter-spacing: 0.08em;
+  color: #fff;
+}
+.footer-brand span { color: var(--orange2); }
+.footer-line {
+  font-size: 12px; color: rgba(255,255,255,0.4);
+  margin-top: 6px; line-height: 1.7;
+}
+.footer-phone {
+  font-family: var(--mono); color: var(--orange2); font-size: 13px;
+}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:520px){
+  .grid-3 { grid-template-columns:1fr 1fr; }
+  .grid-3 .field:last-child { grid-column:span 2; }
+  .prohib-grid { grid-template-columns:1fr; }
+  .wa-card { flex-direction:column; text-align:center; }
+  .wa-info { text-align:center; }
+  .pkg-result-grid { grid-template-columns:1fr 1fr; }
+  .logo-mran { font-size:32px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    Huntington Beach, CA
+    <div class="topbar-divider"></div>
+    US to Kenya Air Freight
+  </div>
+  <div class="topbar-right">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+    <span class="topbar-phone">+254 725 041 080</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="logo-wrap">
+    <div class="logo-svg-block">
+      <!-- Clean plane icon -->
+      <div style="margin-right:14px;display:flex;align-items:center;justify-content:center;">
+        <div style="width:58px;height:58px;border-radius:14px;background:rgba(232,98,10,0.15);border:1px solid rgba(232,98,10,0.3);display:flex;align-items:center;justify-content:center;">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" fill="rgba(255,255,255,0.08)"/>
+            <path d="M3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"/>
+          </svg>
+        </div>
+      </div>
+      <div class="logo-name-block">
+        <div class="logo-mran">MRAN</div>
+        <div class="logo-logistics">
+          <span class="logo-dash"></span>
+          LOGISTICS
+          <span class="logo-dash"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-title">Air Freight Shipping Cost Calculator</div>
+  <div class="hero-sub">Fast, reliable air freight from the United States to Kenya. Get your instant estimate below.</div>
+  <div class="hero-pills">
+    <div class="hpill"><div class="hpill-dot g"></div>Live Rates Active</div>
+    <div class="hpill"><div class="hpill-dot o"></div>$15 / kg Rate</div>
+    <div class="hpill"><div class="hpill-dot b"></div>USD &amp; KES</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+    </div>
+    <div class="card-title">How the Calculator Works</div>
+  </div>
+  <div class="card-body">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Convert Weight to Kilograms</div>
+          <div class="step-desc">Actual weight must be in kilograms. If your weight is in pounds, divide by 2.20462 to convert.</div>
+          <div class="step-formula">kg = lbs ÷ 2.20462</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Calculate Volumetric Weight</div>
+          <div class="step-desc">Volumetric weight accounts for the size of your package. Enter dimensions in inches.</div>
+          <div class="step-formula">Volumetric Weight (kg) = (L × W × H in inches) ÷ 366</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Chargeable Weight</div>
+          <div class="step-desc">The chargeable weight is the higher of the actual weight or volumetric weight. Airlines always bill on the greater of the two.</div>
+          <div class="step-formula">Chargeable Weight = MAX(actual weight, volumetric weight)</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Air Cost Calculation</div>
+          <div class="step-desc">Our air freight to Kenya rate is <strong>$15/KG</strong> based on the actual or volumetric weight — whichever is higher. The <strong>minimum charge is $15</strong>. A flat <strong>$5 customs clearance</strong> fee is added to every shipment.</div>
+          <div class="step-formula">Air Cost = (Chargeable Weight × $15) + $5 customs</div>
+        </div>
+      </div>
+    </div>
+    <div class="rate-banner">
+      <div class="rb-item">
+        <div class="rb-label">Air Freight Rate</div>
+        <div class="rb-val">$15 / kg</div>
+      </div>
+      <div class="rb-item">
+        <div class="rb-label">Minimum Charge</div>
+        <div class="rb-val">$15.00</div>
+      </div>
+      <div class="rb-item">
+        <div class="rb-label">Customs Clearance</div>
+        <div class="rb-val">$5.00</div>
+      </div>
+      <div class="rb-item">
+        <div class="rb-label">Exchange Rate</div>
+        <div class="rb-val w">KES 135 / USD</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CALCULATOR ═══ -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M8 14h4"/></svg>
+    </div>
+    <div class="card-title">Calculate Shipping Cost</div>
+  </div>
+  <div class="card-body">
+
+    <!-- Client Name -->
+    <div class="field" style="margin-bottom:18px;">
+      <div class="field-label">Client Name</div>
+      <div class="input-shell">
+        <input type="text" id="clientName" placeholder="Enter your full name" oninput="syncName()"/>
+      </div>
+    </div>
+
+    <!-- Packages -->
+    <div style="margin-bottom:18px;">
+      <div class="field-label" style="margin-bottom:10px;">Packages</div>
+      <div class="packages" id="pkgList"></div>
+      <button class="add-pkg-btn" onclick="addPackage()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Add Another Package
+      </button>
+    </div>
+
+    <!-- Delivery -->
+    <div class="field-label">Delivery Option</div>
+    <div class="del-toggle" id="delCard" onclick="toggleDel()">
+      <div class="del-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <div class="del-info">
+        <div class="del-title">Add Home Delivery</div>
+        <div class="del-desc">Door-to-door delivery within Nairobi</div>
+      </div>
+      <div class="del-price">+ KES 450</div>
+      <div class="tog"></div>
+    </div>
+    <input type="checkbox" id="homeDelivery"/>
+
+    <button class="calc-btn" onclick="calculate()">Calculate Shipping Cost</button>
+
+    <div class="err-box" id="errBox">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span id="errTxt">Please fill in all required fields.</span>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-wrap" id="resultsWrap">
+      <div class="results-hdr">
+        <div class="results-hdr-title" id="resultsTitle">Cost Breakdown</div>
+        <div class="est-tag">ESTIMATE</div>
+      </div>
+      <div class="results-body">
+        <div class="pkg-results" id="pkgResultsEl"></div>
+        <div class="r-row">
+          <div class="r-key"><div class="dot o"></div>Customs clearance</div>
+          <div class="r-val" id="r-customs">—</div>
+        </div>
+        <div class="r-row">
+          <div class="r-key"><div class="dot g"></div>Home delivery</div>
+          <div class="r-val" id="r-del">—</div>
+        </div>
+        <div class="total-block">
+          <div class="total-usd">
+            <div class="total-usd-label">Total (USD)</div>
+            <div class="total-usd-val" id="r-usd">—</div>
+          </div>
+          <div class="total-kes">
+            <div class="total-kes-label">
+              <span>Total Amount</span>
+              <span>Kenyan Shillings</span>
+            </div>
+            <div class="total-kes-val" id="r-kes">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ SHIPPING ADDRESS ═══ -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    </div>
+    <div class="card-title">US Shipping Address</div>
+  </div>
+  <div class="card-body">
+    <div style="font-size:13px;color:var(--text3);margin-bottom:16px;line-height:1.6;">
+      Ship your purchases to our US warehouse below. Always include <strong>MRAN Logistics</strong> and your full name in the attention/address line so we can identify your package on arrival.
+    </div>
+    <div class="addr-block">
+      <div class="addr-header">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/></svg>
+        MRAN Logistics — US Warehouse
+      </div>
+      <div class="addr-grid">
+        <div class="al">Attn</div>
+        <div class="av highlight">MRAN Logistics — <em id="addrName">[Your Name]</em></div>
+        <div class="al">Address</div>
+        <div class="av">17401 Nichols Ln Ste J</div>
+        <div class="al">City</div>
+        <div class="av">Huntington Beach</div>
+        <div class="al">State / ZIP</div>
+        <div class="av">California 92647</div>
+        <div class="al">Country</div>
+        <div class="av">United States</div>
+        <div class="al">Phone</div>
+        <div class="av" style="font-family:var(--mono)">+1 657 215 7361</div>
+      </div>
+      <button class="copy-btn" id="copyBtn" onclick="copyAddr()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copy Full Address
+      </button>
+    </div>
+    <div class="addr-note">
+      ⚠️ <strong>Important:</strong> Include <em>MRAN Logistics</em> and your name in the "Ship To" name field when placing your order. Add your order or tracking number as a reference where possible. Packages without proper identification may be delayed.
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROHIBITED ITEMS ═══ -->
+<style>
+/* Accordion styles */
+.acc-group { display:flex; flex-direction:column; gap:8px; }
+
+.acc-item { border-radius:var(--r-sm); overflow:hidden; border:1px solid var(--line2); }
+
+.acc-trigger {
+  width:100%; display:flex; align-items:center; gap:10px;
+  padding:13px 14px;
+  background:var(--card2); border:none; cursor:pointer;
+  text-align:left; transition:background 0.15s;
+  font-family:var(--ff);
+}
+.acc-trigger:hover { background:var(--off-white); }
+.acc-trigger.open { background:var(--navy); }
+
+.acc-cat-icon {
+  width:26px; height:26px; border-radius:6px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.acc-cat-icon svg { width:13px; height:13px; }
+.aci-red { background:var(--red-dim); }
+.aci-orange { background:var(--orange-dim); }
+.aci-amber { background:var(--amber-dim); }
+.aci-navy { background:rgba(13,31,60,0.08); }
+.acc-trigger.open .acc-cat-icon { opacity:0.85; }
+
+.acc-cat-label {
+  flex:1; font-family:var(--ffc); font-size:13px; font-weight:700;
+  letter-spacing:0.06em; text-transform:uppercase; color:var(--text);
+}
+.acc-trigger.open .acc-cat-label { color:#fff; }
+
+.acc-count {
+  font-family:var(--mono); font-size:11px; font-weight:500;
+  background:var(--line); color:var(--text3);
+  border-radius:10px; padding:2px 8px; flex-shrink:0;
+}
+.acc-trigger.open .acc-count { background:rgba(255,255,255,0.15); color:rgba(255,255,255,0.7); }
+
+.acc-chevron {
+  width:16px; height:16px; flex-shrink:0;
+  color:var(--muted); transition:transform 0.22s;
+}
+.acc-trigger.open .acc-chevron { transform:rotate(180deg); color:rgba(255,255,255,0.6); }
+
+.acc-body {
+  display:none;
+  padding:12px;
+  background:var(--card);
+  border-top:1px solid var(--line);
+}
+.acc-body.open { display:block; }
+
+.acc-items-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+
+.prohib-item {
+  display:flex; align-items:flex-start; gap:8px;
+  border-radius:7px; padding:9px 11px;
+}
+.prohib-item.banned {
+  background:var(--red-dim); border:1px solid rgba(211,47,47,0.1);
+}
+.prohib-item.conditional {
+  background:var(--amber-dim); border:1px solid rgba(245,158,11,0.2);
+}
+
+.prohib-badge {
+  width:18px; height:18px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:800; flex-shrink:0; margin-top:1px;
+  line-height:1;
+}
+.badge-ban { background:var(--red); color:#fff; }
+.badge-cond { background:var(--amber); color:#fff; }
+
+.prohib-text { font-size:12px; line-height:1.45; }
+.prohib-item.banned .prohib-text { color:var(--text2); }
+.prohib-item.conditional .prohib-text { color:#7a5300; }
+
+.cond-note {
+  display:flex; align-items:center; gap:5px;
+  margin-top:8px; padding:8px 10px;
+  background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2);
+  border-radius:6px; font-size:11px; color:#7a5300; line-height:1.5;
+}
+.cond-note svg { width:13px; height:13px; flex-shrink:0; color:var(--amber); }
+
+.prohib-warn {
+  display:flex; align-items:flex-start; gap:10px;
+  background:var(--amber-dim); border:1px solid rgba(245,158,11,0.2);
+  border-radius:var(--r-sm); padding:13px 14px; margin-top:14px;
+}
+.prohib-warn svg { width:16px; height:16px; flex-shrink:0; margin-top:1px; color:var(--amber); }
+.prohib-warn-text { font-size:13px; color:var(--text2); line-height:1.6; }
+
+@media(max-width:520px){ .acc-items-grid { grid-template-columns:1fr; } }
+</style>
+
+<div class="card">
+  <div class="card-header">
+    <div class="card-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+    </div>
+    <div class="card-title">Prohibited &amp; Restricted Items</div>
+  </div>
+  <div class="card-body">
+    <div style="font-size:13px;color:var(--text3);margin-bottom:16px;line-height:1.6;">
+      The following items <strong>cannot be shipped</strong> via air freight. Items marked <span style="display:inline-flex;align-items:center;gap:4px;vertical-align:middle;"><span style="background:var(--amber);color:#fff;border-radius:50%;width:15px;height:15px;font-size:9px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;">!</span></span> are <strong>conditional</strong> — allowed only under strict conditions. Click each category to expand.
+    </div>
+
+    <div class="acc-group">
+
+      <!-- CAT 1: Dangerous & Hazardous -->
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggleAcc(this)">
+          <div class="acc-cat-icon aci-red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+          </div>
+          <div class="acc-cat-label">Dangerous &amp; Hazardous</div>
+          <div class="acc-count">11 items</div>
+          <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-body">
+          <div class="acc-items-grid">
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Powerbanks, power stations &amp; loose lithium batteries</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Standalone phone, camera or laptop batteries</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Items containing lithium batteries separated during packing</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Aerosol cans (excluding body spray)</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Fireworks &amp; flares</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Gas cylinders / pressurized materials</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Oxidizing substances (bleach, peroxides)</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Lighters, matches &amp; butane torches</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Concentrated alcohol products</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Paint</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Poisonous substances</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAT 2: Weapons & Security -->
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggleAcc(this)">
+          <div class="acc-cat-icon aci-red">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M4.5 8H6v-1.5C6 5.67 5.33 5 4.5 5S3 5.67 3 6.5 3.67 8 4.5 8z"/><path d="M6 10V3.5C6 2.67 6.67 2 7.5 2S9 2.67 9 3.5V10"/><path d="M14 10H2v6l4 2 4-2h4z"/></svg>
+          </div>
+          <div class="acc-cat-label">Weapons &amp; Security</div>
+          <div class="acc-count">5 items</div>
+          <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-body">
+          <div class="acc-items-grid">
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Ammunition, guns, tasers, explosives or replicas</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Weapons including knives (non-kitchen)</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Pepper spray</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Military or police uniforms or gear</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Tactical clothing or accessories</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAT 3: Regulated Substances -->
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggleAcc(this)">
+          <div class="acc-cat-icon aci-orange">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><path d="M10 2v7.31l-3.3 3.3A2 2 0 008.1 16h7.8a2 2 0 001.4-3.4L14 9.31V2"/><path d="M6 2h12"/></svg>
+          </div>
+          <div class="acc-cat-label">Regulated Substances</div>
+          <div class="acc-count">8 items</div>
+          <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-body">
+          <div class="acc-items-grid">
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Vape pens, vape juice &amp; accessories</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Alcohol, tobacco &amp; nicotine products</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Hemp oil &amp; CBD products</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Over-the-counter medication</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Prescription medicine</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Toxic &amp; infectious substances</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Adult / sex toys</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Drones / UAVs</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAT 4: Biological & Organic -->
+      <div class="acc-item">
+        <button class="acc-trigger" onclick="toggleAcc(this)">
+          <div class="acc-cat-icon aci-navy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="acc-cat-label">Biological &amp; Organic</div>
+          <div class="acc-count">6 items</div>
+          <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-body">
+          <div class="acc-items-grid">
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Human or animal remains or ashes</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Live organisms (animals, insects, plants)</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Animal skins, furs &amp; ivory</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Seeds, plants &amp; fertilizers</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Perishable food items</div></div>
+            <div class="prohib-item banned"><div class="prohib-badge badge-ban">✕</div><div class="prohib-text">Money, currency &amp; legal documents</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAT 5: Conditional / Ship at Own Risk -->
+      <div class="acc-item" style="border-color:rgba(245,158,11,0.35);">
+        <button class="acc-trigger" onclick="toggleAcc(this)" style="background:rgba(245,158,11,0.06);">
+          <div class="acc-cat-icon aci-amber">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </div>
+          <div class="acc-cat-label" style="color:#8a5c00;">Conditional / Own Risk</div>
+          <div class="acc-count" style="background:rgba(245,158,11,0.15);color:#8a5c00;">5 items</div>
+          <svg class="acc-chevron" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="acc-body" style="background:#fffbf0;">
+          <div class="cond-note" style="margin-bottom:10px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+            These items are allowed <strong>only under the stated conditions</strong>. Contact us before shipping if unsure.
+          </div>
+          <div class="acc-items-grid">
+            <div class="prohib-item conditional"><div class="prohib-badge badge-cond">!</div><div class="prohib-text"><strong>Perfumes</strong> — factory sealed original packaging only</div></div>
+            <div class="prohib-item conditional"><div class="prohib-badge badge-cond">!</div><div class="prohib-text"><strong>Dietary supplements</strong> — factory sealed only</div></div>
+            <div class="prohib-item conditional"><div class="prohib-badge badge-cond">!</div><div class="prohib-text"><strong>Protein &amp; workout supplements</strong> — factory sealed only</div></div>
+            <div class="prohib-item conditional"><div class="prohib-badge badge-cond">!</div><div class="prohib-text"><strong>Glass &amp; ceramic items</strong> — ship at own risk, no liability for breakage</div></div>
+            <div class="prohib-item conditional"><div class="prohib-badge badge-cond">!</div><div class="prohib-text"><strong>Letters or mail</strong> — contact us before sending</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /acc-group -->
+
+    <div class="prohib-warn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <div class="prohib-warn-text">
+        Not sure if your item qualifies? <strong>Contact us on WhatsApp before purchasing.</strong> MRAN Logistics is not liable for items confiscated at customs due to prohibited content. All shipments are subject to Kenyan Customs &amp; Revenue Authority (KRA) regulations.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ WHATSAPP ═══ -->
+<div class="wa-card">
+  <div class="wa-icon-wrap">
+    <svg viewBox="0 0 32 32" fill="var(--wa)">
+      <path d="M16 2C8.27 2 2 8.27 2 16c0 2.48.67 4.8 1.83 6.8L2 30l7.4-1.8A13.93 13.93 0 0016 30c7.73 0 14-6.27 14-14S23.73 2 16 2zm0 25.4c-2.17 0-4.2-.57-5.96-1.57l-.42-.25-4.4 1.07 1.1-4.27-.28-.44A11.4 11.4 0 014.6 16C4.6 9.7 9.7 4.6 16 4.6S27.4 9.7 27.4 16 22.3 27.4 16 27.4zm6.27-8.5c-.34-.17-2.03-1-2.35-1.12-.32-.1-.55-.17-.78.18-.23.34-.9 1.12-1.1 1.35-.2.22-.4.25-.74.08-.34-.17-1.44-.53-2.74-1.7-1.01-.9-1.7-2.02-1.9-2.36-.2-.34-.02-.52.15-.7.15-.15.34-.4.51-.6.17-.2.23-.34.34-.57.11-.22.06-.43-.03-.6-.08-.17-.78-1.88-1.07-2.57-.28-.67-.57-.58-.78-.59h-.66c-.22 0-.58.08-.88.4-.3.34-1 1-1 2.43s1.03 2.82 1.35 3.41c.17.22 2.34 3.57 5.67 5 .79.34 1.41.54 1.89.69.79.25 1.51.22 2.08.13.63-.1 1.95-.8 2.22-1.57.28-.77.28-1.43.2-1.57-.09-.13-.3-.22-.63-.39z"/>
+    </svg>
+  </div>
+  <div class="wa-info">
+    <div class="wa-title">Get a Quote on WhatsApp</div>
+    <div class="wa-desc">Have questions or need a custom shipping quote? Our team is ready to help you on WhatsApp — fast, friendly, and personal.</div>
+  </div>
+  <a class="wa-btn" href="https://wa.me/254725041080?text=Hello%20MRAN%20Logistics%2C%20I%20would%20like%20to%20get%20a%20shipping%20quote." target="_blank">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.29-.15-1.7-.84-1.96-.93-.27-.1-.46-.15-.66.15-.19.29-.75.93-.92 1.13-.17.19-.34.21-.62.07-1.67-.83-2.77-1.49-3.87-3.38-.29-.5.29-.46.84-1.54.09-.19.05-.36-.03-.5-.07-.14-.66-1.59-.9-2.17-.24-.57-.48-.49-.66-.5-.17 0-.36-.02-.55-.02s-.5.07-.77.36c-.26.29-1 1-1 2.43s1.03 2.82 1.17 3.01c.15.19 2.03 3.1 4.92 4.35 1.83.79 2.55.86 3.46.72.56-.08 1.7-.69 1.94-1.37.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.9.53 3.67 1.44 5.19L2 22l4.94-1.42A9.95 9.95 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.74 0-3.36-.49-4.74-1.34l-.34-.2-3.5.85.87-3.38-.22-.35A7.97 7.97 0 014 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8z"/></svg>
+    Chat on WhatsApp
+  </a>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-brand">MRAN <span>LOGISTICS</span></div>
+  <div class="footer-line">
+    Air Freight Services — US to Kenya &nbsp;|&nbsp;
+    17401 Nichols Ln Ste J, Huntington Beach, CA 92647 &nbsp;|&nbsp;
+    <span class="footer-phone">+1 657 215 7361</span>
+  </div>
+  <div class="footer-line" style="margin-top:4px;font-size:11px;">
+    Rates effective 2025 · Estimates only — final charges may vary based on actual measurements at our warehouse.
+  </div>
+</div>
+
+<script>
+let pkgCount = 0;
+
+function toggleAcc(btn) {
+  const body = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+  btn.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+function addPackage() {
+  pkgCount++;
+  const id = pkgCount;
+  const div = document.createElement('div');
+  div.className = 'pkg-row';
+  div.id = 'pkg-' + id;
+  div.innerHTML = `
+    <div class="pkg-row-head">
+      <div class="pkg-label">
+        <div class="pkg-num">${id}</div>
+        Package ${id}
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="display:flex;align-items:center;gap:5px;">
+          <span style="font-size:10px;color:var(--muted);font-weight:600;letter-spacing:0.06em;text-transform:uppercase;">Tracking #</span>
+          <input class="track-input" type="text" id="trk-${id}" placeholder="Optional tracking no."/>
+        </div>
+        ${id > 1 ? `<div class="remove-pkg" onclick="removePkg(${id})" title="Remove package">×</div>` : ''}
+      </div>
+    </div>
+    <div class="grid-3" style="margin-bottom:12px;">
+      <div class="field">
+        <div class="field-label">Length</div>
+        <div class="input-shell">
+          <input type="number" id="l-${id}" placeholder="0" min="0"/>
+          <span class="input-unit">in</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Width</div>
+        <div class="input-shell">
+          <input type="number" id="w-${id}" placeholder="0" min="0"/>
+          <span class="input-unit">in</span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Height</div>
+        <div class="input-shell">
+          <input type="number" id="h-${id}" placeholder="0" min="0"/>
+          <span class="input-unit">in</span>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <div class="field-label">Actual Weight</div>
+      <div class="input-shell">
+        <input type="number" id="wt-${id}" placeholder="0.00" min="0" step="0.01"/>
+        <span class="input-unit">kg</span>
+      </div>
+    </div>`;
+  document.getElementById('pkgList').appendChild(div);
+}
+
+function removePkg(id) {
+  const el = document.getElementById('pkg-' + id);
+  if (el) el.remove();
+}
+
+function toggleDel() {
+  const cb = document.getElementById('homeDelivery');
+  cb.checked = !cb.checked;
+  document.getElementById('delCard').classList.toggle('on', cb.checked);
+}
+
+function syncName() {
+  const v = document.getElementById('clientName').value.trim();
+  document.getElementById('addrName').textContent = v || '[Your Name]';
+}
+
+function copyAddr() {
+  const name = document.getElementById('clientName').value.trim() || '[Your Name]';
+  const text = `MRAN Logistics — ${name}\n17401 Nichols Ln Ste J\nHuntington Beach, CA 92647\nUnited States\nPhone: +1 657 215 7361`;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Copied to Clipboard!`;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Full Address`;
+    }, 2500);
+  });
+}
+
+function fmt(n) {
+  return n.toLocaleString('en-KE', { minimumFractionDigits:0, maximumFractionDigits:0 });
+}
+
+function calculate() {
+  const errBox = document.getElementById('errBox');
+  const errTxt = document.getElementById('errTxt');
+  const resultsWrap = document.getElementById('resultsWrap');
+
+  const rows = document.querySelectorAll('.pkg-row');
+  if (!rows.length) {
+    errTxt.textContent = 'Please add at least one package.';
+    errBox.classList.add('show');
+    resultsWrap.classList.remove('show');
+    return;
+  }
+
+  const pkgs = [];
+  for (const row of rows) {
+    const rid = row.id.replace('pkg-', '');
+    const L  = parseFloat(document.getElementById('l-'  + rid)?.value) || 0;
+    const W  = parseFloat(document.getElementById('w-'  + rid)?.value) || 0;
+    const H  = parseFloat(document.getElementById('h-'  + rid)?.value) || 0;
+    const wt = parseFloat(document.getElementById('wt-' + rid)?.value) || 0;
+    const tk = document.getElementById('trk-' + rid)?.value.trim() || '';
+    if (!L || !W || !H || !wt || L <= 0 || W <= 0 || H <= 0 || wt <= 0) {
+      errTxt.textContent = `Please complete all fields for Package ${rid}.`;
+      errBox.classList.add('show');
+      resultsWrap.classList.remove('show');
+      return;
+    }
+    pkgs.push({ rid, L, W, H, wt, tk });
+  }
+  errBox.classList.remove('show');
+
+  const RATE = 15, MIN = 15, CUSTOMS = 5, RATE_KES = 135;
+  let totalFreight = 0;
+
+  const calcs = pkgs.map(p => {
+    const vol = (p.L * p.W * p.H) / 366;
+    const chg = Math.max(p.wt, vol);
+    let freight = chg * RATE;
+    if (freight < MIN) freight = MIN;
+    totalFreight += freight;
+    return { ...p, vol, chg, freight };
+  });
+
+  const totalUsd = totalFreight + CUSTOMS;
+  const hasDeliv = document.getElementById('homeDelivery').checked;
+  const delKes   = hasDeliv ? 450 : 0;
+  const totalKes = totalUsd * RATE_KES + delKes;
+
+  const pkgEl = document.getElementById('pkgResultsEl');
+  pkgEl.innerHTML = '';
+  calcs.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'pkg-result-card';
+    d.innerHTML = `
+      <div class="pkg-result-label">Package ${p.rid}${p.tk ? ' &nbsp;·&nbsp; ' + p.tk : ''}</div>
+      <div class="pkg-result-grid">
+        <div class="prg-item"><div class="prg-l">Vol. Weight</div><div class="prg-v">${p.vol.toFixed(2)} kg</div></div>
+        <div class="prg-item"><div class="prg-l">Chargeable</div><div class="prg-v hl">${p.chg.toFixed(2)} kg</div></div>
+        <div class="prg-item"><div class="prg-l">Freight</div><div class="prg-v">$${p.freight.toFixed(2)}</div></div>
+      </div>`;
+    pkgEl.appendChild(d);
+  });
+
+  const client = document.getElementById('clientName').value.trim();
+  document.getElementById('resultsTitle').textContent = client ? `Quote for ${client}` : 'Cost Breakdown';
+  document.getElementById('r-customs').textContent = '$5.00';
+  document.getElementById('r-del').textContent = hasDeliv ? 'KES 450' : 'Not included';
+  document.getElementById('r-usd').textContent = '$' + totalUsd.toFixed(2);
+  document.getElementById('r-kes').textContent = 'KES ' + fmt(totalKes);
+
+  resultsWrap.classList.add('show');
+  setTimeout(() => resultsWrap.scrollIntoView({ behavior:'smooth', block:'nearest' }), 60);
+}
+
+addPackage(); // Start with 1 package
+</script>
+</body>
+</html>
