@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MRAN Logistics – Air Freight &amp; Ocean Shipping</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;500&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════
    GLOBAL TOKENS
@@ -448,11 +448,11 @@ body {
 }
 .ocean-eyebrow::before { content:''; display:block; width:28px; height:2px; background:var(--wave); }
 .ocean-h1 {
-  font-family: var(--serif);
+  font-family: var(--ffc);
   font-size: clamp(2.4rem,4vw,3.8rem);
-  font-weight: 700; line-height: 1.05; margin-bottom: 22px; letter-spacing: -1px;
+  font-weight: 800; line-height: 1.05; margin-bottom: 22px; letter-spacing: 0.01em;
 }
-.ocean-h1 .accent { display:block; color:var(--sand); font-style:italic; }
+.ocean-h1 .accent { display:block; color:var(--sand); font-style:normal; }
 .ocean-sub { font-size:1rem; color:var(--fog); line-height:1.7; max-width:380px; margin-bottom:40px; }
 .ocean-cta {
   display: inline-block; padding: 14px 30px;
@@ -482,7 +482,7 @@ body {
 .ocean-stats { display:grid; grid-template-columns:repeat(4,1fr); background:var(--sea); }
 .ostat { padding:32px 24px; border-right:1px solid rgba(255,255,255,0.1); text-align:center; }
 .ostat:last-child{border-right:none;}
-.ostat-num { font-family:var(--serif); font-size:2.2rem; font-weight:700; color:var(--sand); display:block; line-height:1; margin-bottom:5px; }
+.ostat-num { font-family:var(--ffc); font-size:2.2rem; font-weight:700; color:var(--sand); display:block; line-height:1; margin-bottom:5px; }
 .ostat-lbl { font-size:0.7rem; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.5); font-weight:500; }
 
 /* ocean sections */
@@ -492,7 +492,7 @@ body {
 .osec--darkest { background:var(--ink); color:var(--white); }
 .osec-kicker { font-size:0.68rem; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--wave); margin-bottom:12px; }
 .osec--light .osec-kicker { color:var(--sea); }
-.osec-heading { font-family:var(--serif); font-size:clamp(1.8rem,3vw,2.8rem); font-weight:700; line-height:1.1; margin-bottom:48px; max-width:500px; letter-spacing:-0.5px; }
+.osec-heading { font-family:var(--ffc); font-size:clamp(1.8rem,3vw,2.8rem); font-weight:700; line-height:1.1; margin-bottom:48px; max-width:500px; letter-spacing:-0.5px; }
 .osec--light .osec-heading { color:var(--ink); }
 
 /* why cards */
@@ -502,7 +502,7 @@ body {
 .why-card:hover{transform:translateY(-5px);box-shadow:0 18px 48px rgba(10,22,40,0.12);}
 .why-card:hover::after{transform:scaleX(1);}
 .why-icon{font-size:1.8rem;margin-bottom:16px;display:block;}
-.why-card h3{font-family:var(--serif);font-size:1.2rem;font-weight:700;color:var(--ink);margin-bottom:10px;}
+.why-card h3{font-family:var(--ffc);font-size:1.2rem;font-weight:700;color:var(--ink);margin-bottom:10px;}
 .why-card p{font-size:0.84rem;color:#607080;line-height:1.7;}
 
 /* price grid */
@@ -511,7 +511,7 @@ body {
 .price-tile:hover{background:rgba(29,143,160,0.12);}
 .price-tile::before{content:'';position:absolute;top:0;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,rgba(29,143,160,0.4),transparent);}
 .price-tile-name{font-size:0.76rem;color:var(--fog);margin-bottom:14px;line-height:1.4;}
-.price-tile-amount{font-family:var(--serif);font-size:2rem;font-weight:700;color:var(--sand);line-height:1;}
+.price-tile-amount{font-family:var(--ffc);font-size:2rem;font-weight:700;color:var(--sand);line-height:1;}
 .price-tile-amount sup{font-size:0.9rem;font-family:var(--ff);font-weight:400;color:var(--fog);vertical-align:super;}
 
 /* ocean calculator */
@@ -527,7 +527,7 @@ body {
 .ocalc-output{margin-top:22px;border-radius:12px;padding:28px;background:rgba(232,201,122,0.07);border:1px solid rgba(232,201,122,0.25);text-align:center;display:none;animation:slideUp 0.4s ease;}
 .ocalc-output.show{display:block;}
 .output-label{font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--fog);margin-bottom:10px;}
-.output-amount{font-family:var(--serif);font-size:3.2rem;font-weight:700;color:var(--sand);line-height:1;margin-bottom:12px;}
+.output-amount{font-family:var(--ffc);font-size:3.2rem;font-weight:700;color:var(--sand);line-height:1;margin-bottom:12px;}
 .output-breakdown{font-size:0.8rem;color:var(--fog);line-height:1.6;}
 .output-note{margin-top:14px;font-size:0.73rem;color:rgba(142,168,195,0.7);font-style:italic;}
 
@@ -535,7 +535,7 @@ body {
 .osteps-row{display:grid;grid-template-columns:repeat(4,1fr);position:relative;gap:0;}
 .osteps-row::before{content:'';position:absolute;top:27px;left:12.5%;right:12.5%;height:1px;background:linear-gradient(90deg,var(--sea),var(--wave),var(--sea));opacity:0.5;}
 .ostep{text-align:center;padding:0 16px;}
-.ostep-circle{width:54px;height:54px;border-radius:50%;border:2px solid var(--sea);background:var(--off-white);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-family:var(--serif);font-size:1.3rem;font-weight:700;color:var(--sea);position:relative;z-index:2;box-shadow:0 0 0 8px var(--off-white);}
+.ostep-circle{width:54px;height:54px;border-radius:50%;border:2px solid var(--sea);background:var(--off-white);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-family:var(--ffc);font-size:1.3rem;font-weight:700;color:var(--sea);position:relative;z-index:2;box-shadow:0 0 0 8px var(--off-white);}
 .ostep h3{font-size:0.7rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);margin-bottom:10px;}
 .ostep p{font-size:0.82rem;color:#607080;line-height:1.6;}
 
@@ -1255,6 +1255,270 @@ function copyOceanAddr() {
 /* ── INIT ── */
 addPackage();
 setCurrency('KES');
+</script>
+
+<!-- ═══════════════════════════════════════
+     FLOATING BUTTONS + SMART FAQ CHATBOT
+═══════════════════════════════════════ -->
+<style>
+.fab-stack {
+  position: fixed; bottom: 24px; right: 24px;
+  display: flex; flex-direction: column; align-items: flex-end;
+  gap: 12px; z-index: 1000;
+}
+.fab-wa {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: #25d366; border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 4px 16px rgba(37,211,102,0.45);
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+}
+.fab-wa:hover { transform: scale(1.08); box-shadow: 0 6px 22px rgba(37,211,102,0.55); }
+.fab-wa svg { width: 26px; height: 26px; }
+.fab-chat {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: var(--orange); border: none;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; box-shadow: 0 4px 16px rgba(232,98,10,0.45);
+  transition: transform 0.2s; position: relative;
+}
+.fab-chat:hover { transform: scale(1.08); }
+.fab-chat svg { width: 24px; height: 24px; }
+.fab-dot {
+  position: absolute; top: 0; right: 0;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--orange2); border: 2px solid #fff;
+  animation: fabPulse 2s infinite;
+}
+@keyframes fabPulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.3)} }
+
+.chat-window {
+  position: fixed; bottom: 90px; right: 24px;
+  width: min(370px, calc(100vw - 32px));
+  height: min(540px, calc(100vh - 120px));
+  background: var(--navy2);
+  border: 1px solid var(--navy3);
+  border-radius: 16px;
+  display: flex; flex-direction: column;
+  box-shadow: 0 16px 64px rgba(0,0,0,0.5);
+  z-index: 999;
+  transform: scale(0.85) translateY(20px);
+  opacity: 0; pointer-events: none;
+  transform-origin: bottom right;
+  transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), opacity 0.2s;
+}
+.chat-window.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+.chat-hdr {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; background: var(--navy);
+  border-radius: 16px 16px 0 0; border-bottom: 1px solid var(--navy3); flex-shrink: 0;
+}
+.chat-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), #c4510a);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0; position: relative;
+}
+.chat-avatar::after {
+  content:''; position:absolute; bottom:1px; right:1px;
+  width:9px; height:9px; border-radius:50%;
+  background: #25d366; border: 2px solid var(--navy);
+}
+.chat-hdr-info { flex:1; }
+.chat-hdr-name { font-family:var(--ffc); font-size:13px; font-weight:700; color:#fff; letter-spacing:0.04em; }
+.chat-hdr-sub { font-size:10px; color:#25d366; font-weight:500; }
+.chat-hdr-close {
+  width:28px; height:28px; border-radius:50%;
+  background:rgba(255,255,255,0.08); border:none;
+  color:rgba(255,255,255,0.6); font-size:16px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:background 0.15s;
+}
+.chat-hdr-close:hover { background:rgba(255,255,255,0.18); color:#fff; }
+.chat-msgs {
+  flex:1; overflow-y:auto; padding:14px;
+  display:flex; flex-direction:column; gap:10px; scroll-behavior:smooth;
+}
+.chat-msgs::-webkit-scrollbar { width:3px; }
+.chat-msgs::-webkit-scrollbar-thumb { background:var(--navy3); border-radius:2px; }
+.msg { max-width:88%; display:flex; flex-direction:column; gap:3px; }
+.msg.bot { align-self:flex-start; }
+.msg.user { align-self:flex-end; }
+.msg-bubble { padding:10px 13px; border-radius:12px; font-size:13px; line-height:1.6; }
+.msg.bot .msg-bubble { background:#1d3568; color:#dce4ee; border-bottom-left-radius:4px; }
+.msg.user .msg-bubble { background:var(--orange); color:#fff; border-bottom-right-radius:4px; }
+.msg-time { font-size:10px; color:var(--ghost); padding:0 4px; }
+.msg.user .msg-time { text-align:right; }
+.typing { display:none; align-self:flex-start; background:var(--navy3); border-radius:12px; padding:10px 14px; align-items:center; gap:4px; }
+.typing.show { display:flex; }
+.tdot { width:6px; height:6px; border-radius:50%; background:var(--orange); opacity:0.4; animation:tbounce 1.2s infinite; }
+.tdot:nth-child(2){animation-delay:.2s}
+.tdot:nth-child(3){animation-delay:.4s}
+@keyframes tbounce{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+.qr-wrap { padding:0 12px 10px; display:flex; flex-wrap:wrap; gap:6px; flex-shrink:0; }
+.qr {
+  padding:5px 11px; border-radius:14px;
+  border:1px solid var(--navy3); background:transparent;
+  color:var(--muted); font-family:var(--ff); font-size:11px; font-weight:500;
+  cursor:pointer; transition:all 0.15s; white-space:nowrap;
+}
+.qr:hover { background:var(--navy3); color:var(--text); }
+.chat-input-row {
+  display:flex; gap:8px; align-items:center;
+  padding:10px 12px; border-top:1px solid var(--navy3); flex-shrink:0;
+}
+.chat-input {
+  flex:1; background:var(--navy3); border:1px solid var(--navy-light);
+  border-radius:20px; padding:9px 14px;
+  font-family:var(--ff); font-size:13px; color:var(--text);
+  outline:none; transition:border-color 0.15s;
+}
+.chat-input:focus { border-color:var(--orange); }
+.chat-input::placeholder { color:var(--ghost); }
+.chat-send {
+  width:36px; height:36px; border-radius:50%;
+  background:var(--orange); border:none;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; transition:background 0.15s;
+}
+.chat-send:hover { background:var(--orange2); }
+.chat-send svg { width:15px; height:15px; }
+</style>
+
+<div class="fab-stack">
+  <a class="fab-wa" href="https://wa.me/254725041080?text=Hello%20MRAN%20Logistics%2C%20I%20have%20a%20question." target="_blank" title="WhatsApp us">
+    <svg viewBox="0 0 24 24" fill="#fff"><path d="M17.47 14.38c-.29-.15-1.7-.84-1.96-.93-.27-.1-.46-.15-.66.15-.19.29-.75.93-.92 1.13-.17.19-.34.21-.62.07-1.67-.83-2.77-1.49-3.87-3.38-.29-.5.29-.46.84-1.54.09-.19.05-.36-.03-.5-.07-.14-.66-1.59-.9-2.17-.24-.57-.48-.49-.66-.5-.17 0-.36-.02-.55-.02s-.5.07-.77.36c-.26.29-1 1-1 2.43s1.03 2.82 1.17 3.01c.15.19 2.03 3.1 4.92 4.35 1.83.79 2.55.86 3.46.72.56-.08 1.7-.69 1.94-1.37.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.9.53 3.67 1.44 5.19L2 22l4.94-1.42A9.95 9.95 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.74 0-3.36-.49-4.74-1.34l-.34-.2-3.5.85.87-3.38-.22-.35A7.97 7.97 0 014 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8z"/></svg>
+  </a>
+  <button class="fab-chat" onclick="toggleChat()" title="Ask MRAN Assistant">
+    <div class="fab-dot"></div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+  </button>
+</div>
+
+<div class="chat-window" id="chatWindow">
+  <div class="chat-hdr">
+    <div class="chat-avatar">✈️</div>
+    <div class="chat-hdr-info">
+      <div class="chat-hdr-name">MRAN Assistant</div>
+      <div class="chat-hdr-sub">● Online — instant answers</div>
+    </div>
+    <button class="chat-hdr-close" onclick="toggleChat()">×</button>
+  </div>
+  <div class="chat-msgs" id="chatMsgs"></div>
+  <div class="typing" id="typing"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div>
+  <div class="qr-wrap" id="qrWrap"></div>
+  <div class="chat-input-row">
+    <input class="chat-input" id="chatInput" placeholder="Ask me anything about MRAN…" onkeydown="if(event.key==='Enter')sendMsg()"/>
+    <button class="chat-send" onclick="sendMsg()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+const FAQ = [
+  { keys:['air freight rate','rate per kg','how much per kg','price per kg','cost per kg','air cost','air price','air rate','$15'], a:`Our air freight rate is **$15 per kg** — based on whichever is higher between actual weight and volumetric weight.<br><br>📦 Volumetric weight = (L × W × H in inches) ÷ 366<br>💵 Minimum charge: $15<br>🛃 Customs clearance: +$5 per shipment<br>💱 Exchange rate: KES 135 per USD` },
+  { keys:['address','us address','warehouse','ship to','huntington','shipping address','where to ship','where do i ship'], a:`📍 **MRAN Logistics US Warehouse**<br><br>Attn: MRAN Logistics — [Your Name]<br>17401 Nichols Ln Ste J<br>Huntington Beach, CA 92647<br>United States<br>Phone: +1 657 215 7361<br><br>⚠️ Always include your name and "MRAN Logistics" in the Ship To field.` },
+  { keys:['how long','delivery time','transit time','days','weeks','how many days','shipping time','when will','air freight time'], a:`✈️ Air freight typically takes **7–14 days** after we receive your package at our US warehouse.<br><br>🚢 Ocean shipping takes **75–120 days** — but is much cheaper for heavy or bulky items.` },
+  { keys:['ocean','sea freight','ocean shipping','ocean rate','sea shipping','container','barrel','tv shipping','how much for tv'], a:`🚢 Ocean shipping is priced at **$33 per cubic foot** — all-inclusive with customs.<br><br>Popular items:<br>• 55" TV → $225<br>• 65" TV → $285<br>• 75" TV → $435<br>• 85" TV → $650<br>• 55 Gallon Barrel → $330<br><br>Minimum charge: $135 · Delivery: 75–120 days` },
+  { keys:['prohibited','banned','not allowed','cannot ship','restricted','what can i not','illegal','forbidden'], a:`🚫 **Strictly prohibited:**<br>Powerbanks, loose batteries, vapes, weapons, knives (non-kitchen), ammunition, aerosol cans, gas cylinders, fireworks, alcohol products, paint, medication, live animals, perishable food, currency, human remains, drones, and more.<br><br>⚠️ **Conditional (restrictions apply):**<br>Perfumes, supplements, protein powders — factory sealed only.<br>Glass/ceramics — at own risk.<br><br>Not sure? WhatsApp us before purchasing! 💬` },
+  { keys:['battery','powerbank','power bank','lithium','phone battery','laptop battery'], a:`❌ **No.** Standalone batteries and powerbanks are **strictly prohibited.**<br><br>This includes powerbanks, phone batteries, laptop batteries, camera batteries, and loose lithium batteries.<br><br>Devices with built-in batteries (phones, laptops) are fine as long as the battery stays inside the device.` },
+  { keys:['vape','vapes','vape pen','vape juice','e-cigarette'], a:`❌ **No.** Vape pens, vape juice, and all vaping accessories are **strictly prohibited** and cannot be shipped.` },
+  { keys:['medicine','medication','prescription','pills','drugs','supplements','protein','vitamins'], a:`💊 **Medication** (OTC and prescription) is **prohibited** — we cannot ship medicines.<br><br>✅ **Supplements & protein powders** are allowed but **factory sealed in original packaging only.** Opened containers are not accepted.` },
+  { keys:['perfume','cologne','fragrance'], a:`✅ **Yes** — perfumes are allowed, but **factory sealed in original packaging only.** Opened bottles are not accepted.` },
+  { keys:['consolidation','consolidate','combine','merge packages','multiple packages','bundle shipment'], a:`✅ **Yes!** MRAN offers consolidation for small non-hazardous items.<br><br>📦 Eligible: Hair & beauty · Books · Clothing · Skincare · Supplements · Toys · Home goods<br><br>WhatsApp us to arrange: **+254 725 041 080**` },
+  { keys:['home delivery','deliver to my house','door to door','deliver nairobi','nairobi delivery'], a:`🏠 Yes! We offer **home delivery within Nairobi** for an additional **KES 450.**<br><br>Select this option in our shipping calculator on this page.` },
+  { keys:['calculate','calculator','estimate','how much will','cost calculator','shipping cost'], a:`🧮 Use our **shipping calculator** on this page!<br><br>1. Click the ✈️ Air Freight tab<br>2. Enter package dimensions (inches) and weight (kg)<br>3. Hit "Calculate Shipping Cost"<br><br>It instantly shows your USD and KES total.` },
+  { keys:['how does it work','how to ship','process','steps','get started','how do i start','how to use'], a:`Here's how it works:<br><br>1️⃣ Get our US address (shown on this page)<br>2️⃣ Shop at any US store online<br>3️⃣ Ship to our Huntington Beach warehouse — include your name<br>4️⃣ We receive your package and notify you<br>5️⃣ Pay your shipping invoice<br>6️⃣ Your package ships to Kenya ✈️` },
+  { keys:['contact','phone','whatsapp','reach','call','number'], a:`📞 **Kenya WhatsApp:** +254 725 041 080<br>📞 **US Warehouse:** +1 657 215 7361<br><br>WhatsApp is fastest — we usually reply within minutes! 💬` },
+  { keys:['customs','customs clearance','duty','tax','import','kra'], a:`🛃 We handle customs clearance for you!<br><br>• **Air freight:** $5 flat customs fee per shipment<br>• **Ocean shipping:** Customs included in the $33/ft³ rate<br><br>You don't need to deal with KRA — MRAN handles it all.` },
+  { keys:['volumetric','volumetric weight','dimensional weight','chargeable weight'], a:`📐 **Volumetric weight** accounts for the space your package takes up.<br><br>Formula: **(L × W × H in inches) ÷ 366**<br><br>The **chargeable weight** is whichever is higher — actual or volumetric. Airlines always bill the greater of the two.` },
+  { keys:['tracking','track my package','track shipment','where is my package','track order'], a:`📦 Once your package ships, we'll send you a tracking number via WhatsApp.<br><br>For status updates, WhatsApp us at **+254 725 041 080** with your name and tracking number.` },
+  { keys:['gun','weapon','knife','ammunition','ammo','firearm','taser'], a:`❌ All weapons are **strictly prohibited:**<br><br>• Guns, firearms & replicas<br>• Ammunition & explosives<br>• Tasers<br>• Knives (non-kitchen use)<br>• Pepper spray<br>• Military gear & tactical clothing` },
+  { keys:['drone','uav','quadcopter','dji'], a:`❌ **No.** Drones and UAVs are **prohibited** and cannot be shipped via MRAN Logistics.` },
+  { keys:['glass','ceramic','fragile','breakable'], a:`⚠️ Glass and ceramic items are **conditional** — shipped at **your own risk.**<br><br>MRAN accepts no liability for breakage during transit. Ensure items are very well packaged.` },
+];
+
+const FALLBACK = `I don't have a specific answer for that, but our team can help! 💬<br><br>WhatsApp us at <strong>+254 725 041 080</strong> and we'll get back to you quickly.`;
+const GREET = `Hey there! 👋 I'm the <strong>MRAN Logistics Assistant</strong>.<br><br>I can answer questions about shipping rates, our US address, prohibited items, delivery times, and more. What would you like to know?`;
+const QUICK_REPLIES = [
+  {label:'✈️ Air freight rate', text:'What is the air freight rate?'},
+  {label:'📍 US address', text:'What is the US shipping address?'},
+  {label:'⏱️ Delivery time', text:'How long does shipping take?'},
+  {label:'🚫 Prohibited items', text:'What items are prohibited?'},
+  {label:'🚢 Ocean shipping', text:'How does ocean shipping work?'},
+  {label:'🧮 Calculate cost', text:'How do I calculate my shipping cost?'},
+];
+
+let chatOpen = false, greeted = false;
+
+function findAnswer(query) {
+  const q = query.toLowerCase();
+  let best = null, bestScore = 0;
+  for (const item of FAQ) {
+    let score = 0;
+    for (const key of item.keys) { if (q.includes(key)) score += key.length; }
+    if (score > bestScore) { bestScore = score; best = item; }
+  }
+  return bestScore > 0 ? best.a : FALLBACK;
+}
+
+function nowTime() { return new Date().toLocaleTimeString('en-KE',{hour:'2-digit',minute:'2-digit'}); }
+
+function addMsg(html, role) {
+  const msgs = document.getElementById('chatMsgs');
+  const d = document.createElement('div');
+  d.className = `msg ${role}`;
+  // bold markdown
+  const fmt = html.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  d.innerHTML = `<div class="msg-bubble">${fmt}</div><div class="msg-time">${nowTime()}</div>`;
+  msgs.appendChild(d);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping(){ document.getElementById('typing').classList.add('show'); const m=document.getElementById('chatMsgs'); m.scrollTop=m.scrollHeight; }
+function hideTyping(){ document.getElementById('typing').classList.remove('show'); }
+
+function renderQR(replies) {
+  document.getElementById('qrWrap').innerHTML = replies.map(r =>
+    `<button class="qr" onclick="sendQuick('${r.text}')">${r.label}</button>`
+  ).join('');
+}
+
+function sendMsg() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  sendQuick(text);
+}
+
+function sendQuick(text) {
+  document.getElementById('qrWrap').innerHTML = '';
+  addMsg(text, 'user');
+  showTyping();
+  setTimeout(() => {
+    hideTyping();
+    addMsg(findAnswer(text), 'bot');
+    document.getElementById('qrWrap').innerHTML = `
+      <button class="qr" onclick="sendQuick('What is the air freight rate?')">✈️ Rates</button>
+      <button class="qr" onclick="sendQuick('What is the US shipping address?')">📍 Address</button>
+      <button class="qr" onclick="sendQuick('What items are prohibited?')">🚫 Prohibited</button>
+      <button class="qr" onclick="window.open('https://wa.me/254725041080','_blank')" style="background:rgba(37,211,102,0.12);border-color:rgba(37,211,102,0.3);color:#25d366;">💬 WhatsApp us</button>`;
+  }, 600 + Math.random()*400);
+}
+
+function toggleChat() {
+  chatOpen = !chatOpen;
+  document.getElementById('chatWindow').classList.toggle('open', chatOpen);
+  if (chatOpen && !greeted) {
+    greeted = true;
+    showTyping();
+    setTimeout(() => { hideTyping(); addMsg(GREET,'bot'); renderQR(QUICK_REPLIES); }, 700);
+  }
+  if (chatOpen) setTimeout(()=>document.getElementById('chatInput').focus(),350);
+}
 </script>
 </body>
 </html>
