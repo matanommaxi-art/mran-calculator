@@ -191,7 +191,7 @@ body {
 .step-formula{display:inline-block;margin-top:7px;background:var(--navy);border-radius:6px;padding:5px 12px;font-family:var(--mono);font-size:12px;color:var(--orange2);}
 
 /* rate banner */
-.rate-banner{display:flex;flex-wrap:wrap;background:var(--navy);border-radius:var(--r-sm);overflow:hidden;margin-top:18px;border:1px solid var(--navy3);}
+.rate-banner{display:flex;flex-wrap:wrap;background:var(--navy);border-radius:var(--r-sm);overflow:visible;margin-top:18px;border:1px solid var(--navy3);}
 .rb-item{flex:1;min-width:120px;padding:12px 16px;display:flex;flex-direction:column;gap:3px;border-right:1px solid rgba(255,255,255,0.07);}
 .rb-item:last-child{border-right:none;}
 .rb-label{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.4);font-weight:600;}
@@ -217,6 +217,24 @@ body {
 .pkg-num{background:var(--navy);color:#fff;border-radius:5px;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:500;}
 .track-input{background:transparent!important;border:none!important;border-bottom:1.5px solid var(--line2)!important;border-radius:0!important;padding:2px 4px!important;font-family:var(--mono)!important;font-size:11px!important;color:var(--text3)!important;width:140px!important;outline:none!important;}
 .track-input:focus{border-bottom-color:var(--navy)!important;box-shadow:none!important;}
+
+/* ── EXCHANGE RATE INFO ── */
+.rate-info-btn { cursor:pointer; color:var(--orange2); font-size:12px; opacity:0.8; transition:opacity 0.15s; }
+.rate-info-btn:hover { opacity:1; }
+.rate-info-popup {
+  display:none; position:absolute;
+  bottom:calc(100% + 8px); right:0; width:300px;
+  background:var(--navy); border:1px solid var(--navy3);
+  border-left:3px solid var(--orange); border-radius:var(--r-sm);
+  padding:14px; font-family:var(--ff); font-size:12px;
+  color:rgba(255,255,255,0.75); line-height:1.7;
+  z-index:500; box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  animation:slideUp 0.2s ease;
+}
+.rate-info-popup.show { display:block; }
+.rate-info-popup strong { color:var(--orange2); }
+.rate-info-close { float:right; cursor:pointer; color:rgba(255,255,255,0.4); font-size:16px; line-height:1; margin:-2px -2px 6px 6px; }
+.rate-info-close:hover { color:#fff; }
 
 /* ── CURRENCY TOGGLE ── */
 .currency-toggle-row {
@@ -552,6 +570,84 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
 .tbadge-transit{background:rgba(26,74,122,0.4);color:#7ab8f5;}
 .tbadge-departing{background:rgba(232,201,122,0.15);color:var(--sand);}
 
+/* ─── TESTIMONIALS ─── */
+.testi-section {
+  background: var(--bg);
+  padding: 60px 24px;
+  border-top: 1px solid var(--line);
+}
+.testi-inner { max-width: 900px; margin: 0 auto; }
+.testi-kicker {
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 10px;
+}
+.testi-heading {
+  font-family: var(--ffc); font-size: 28px; font-weight: 800;
+  color: var(--navy); letter-spacing: 0.02em;
+  margin-bottom: 36px;
+}
+.testi-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.testi-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 24px;
+  display: flex; flex-direction: column; gap: 16px;
+  box-shadow: var(--shadow);
+  transition: transform 0.25s, box-shadow 0.25s;
+  position: relative; overflow: hidden;
+}
+.testi-card::before {
+  content: '"';
+  position: absolute; top: -10px; right: 16px;
+  font-family: var(--ffc); font-size: 80px; font-weight: 800;
+  color: var(--orange); opacity: 0.08; line-height: 1;
+  pointer-events: none;
+}
+.testi-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.testi-card--featured {
+  background: var(--navy);
+  border-color: var(--navy);
+}
+.testi-card--featured::before { color: var(--orange2); opacity: 0.15; }
+
+.testi-stars { color: var(--amber); font-size: 14px; letter-spacing: 2px; }
+.testi-card--featured .testi-stars { color: var(--orange2); }
+
+.testi-quote {
+  font-size: 14px; line-height: 1.7;
+  color: var(--text2); font-style: italic; flex: 1;
+}
+.testi-card--featured .testi-quote { color: rgba(255,255,255,0.8); }
+
+.testi-author { display: flex; align-items: center; gap: 12px; }
+.testi-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), #c4510a);
+  color: #fff; font-family: var(--ffc); font-size: 17px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.testi-card--featured .testi-avatar {
+  background: linear-gradient(135deg, var(--orange2), var(--orange));
+}
+.testi-name {
+  font-family: var(--ffc); font-size: 14px; font-weight: 700;
+  color: var(--navy); letter-spacing: 0.04em;
+}
+.testi-card--featured .testi-name { color: #fff; }
+.testi-role { font-size: 11px; color: var(--text3); margin-top: 1px; }
+.testi-card--featured .testi-role { color: rgba(255,255,255,0.45); }
+
+@media(max-width:600px){
+  .testi-grid { grid-template-columns: 1fr; }
+  .testi-heading { font-size: 22px; }
+}
+
 /* footer */
 .footer{background:var(--navy);margin-top:0;padding:20px 24px;text-align:center;border-top:3px solid var(--orange);}
 .footer-brand{font-family:var(--ffc);font-size:16px;font-weight:800;letter-spacing:0.08em;color:#fff;}
@@ -596,7 +692,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
   </div>
   <div class="topbar-right">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
-    <span class="topbar-phone">+254 725 041 080</span>
+    <span class="topbar-phone">+254 758 663 108</span>
   </div>
 </div>
 
@@ -662,8 +758,54 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
       <div class="rb-item"><div class="rb-label">Air Freight Rate</div><div class="rb-val">$15 / kg</div></div>
       <div class="rb-item"><div class="rb-label">Minimum Charge</div><div class="rb-val">$15.00</div></div>
       <div class="rb-item"><div class="rb-label">Customs Clearance</div><div class="rb-val">$5.00</div></div>
-      <div class="rb-item"><div class="rb-label">Exchange Rate</div><div class="rb-val w">KES 135 / USD</div></div>
+      <div class="rb-item" style="position:relative;">
+        <div class="rb-label" style="display:flex;align-items:center;gap:5px;">
+          Exchange Rate
+          <span class="rate-info-btn" onclick="toggleRateInfo()" title="Why KES 135?">ⓘ</span>
+        </div>
+        <div class="rb-val w">KES 135 / USD</div>
+        <div class="rate-info-popup" id="rateInfoPopup">
+          <div class="rate-info-close" onclick="toggleRateInfo()">×</div>
+          <strong>Why KES 135?</strong><br><br>
+          The exchange rate used for estimates is <strong>KES 135 per USD</strong>. This reflects the rate applied by our banking partner, which may differ from the Central Bank of Kenya's official rate.<br><br>
+          The final invoice will use the rate at the time of payment — if rates change significantly, we'll notify you before confirming your order.
+        </div>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- Weight Converter -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+    <div class="card-title">Weight Converter — lbs to kg</div>
+  </div>
+  <div class="card-body">
+    <p style="font-size:13px;color:var(--text3);margin-bottom:16px;line-height:1.6;">Shopping on a US site that shows weight in <strong>pounds (lbs)?</strong> Convert it to kilograms before using the calculator below.</p>
+    <div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;">
+      <div class="field" style="flex:1;min-width:140px;">
+        <div class="field-label">Weight in Pounds (lbs)</div>
+        <div class="input-shell">
+          <input type="number" id="lbsInput" placeholder="e.g. 10" min="0" step="0.01" oninput="convertLbs()"/>
+          <span class="input-unit">lbs</span>
+        </div>
+      </div>
+      <div style="padding-bottom:11px;font-size:22px;color:var(--muted);font-weight:300;">=</div>
+      <div class="field" style="flex:1;min-width:140px;">
+        <div class="field-label">Weight in Kilograms (kg)</div>
+        <div class="input-shell">
+          <input type="number" id="kgOutput" placeholder="Result" readonly
+            style="background:var(--card2);cursor:default;color:var(--navy);font-weight:700;border-color:var(--line);"/>
+          <span class="input-unit">kg</span>
+        </div>
+      </div>
+      <button onclick="useInCalculator()" id="useInCalcBtn"
+        style="display:none;padding:11px 18px;background:var(--orange);color:#fff;border:none;border-radius:var(--r-sm);font-family:var(--ffc);font-size:14px;font-weight:700;letter-spacing:0.05em;cursor:pointer;white-space:nowrap;transition:background 0.18s;">
+        Use in Calculator ↓
+      </button>
+    </div>
+    <div id="convNote" style="display:none;margin-top:10px;font-size:12px;color:var(--text3);background:var(--off-white);border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 12px;"></div>
   </div>
 </div>
 
@@ -730,7 +872,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
     <div class="consol-banner" id="consolBanner" style="display:none;">
       <div class="consol-top"><div class="consol-bulb">💡</div><div class="consol-msg"><div class="consol-title">Shipping multiple items?</div><div class="consol-desc">We offer consolidation on small, non-hazardous items — combine your packages into one shipment and potentially save on costs.</div></div></div>
       <div class="consol-tags"><span class="ctag">✂️ Hair &amp; Beauty</span><span class="ctag">📚 Books</span><span class="ctag">👗 Clothing</span><span class="ctag">🧴 Skincare</span><span class="ctag">💊 Supplements</span><span class="ctag">🧸 Toys</span><span class="ctag">🏠 Home Goods</span></div>
-      <a class="consol-wa" href="https://wa.me/254725041080?text=Hello%20MRAN%20Logistics%2C%20I%20would%20like%20to%20arrange%20consolidation%20for%20my%20shipment." target="_blank"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.47 14.38c-.29-.15-1.7-.84-1.96-.93-.27-.1-.46-.15-.66.15-.19.29-.75.93-.92 1.13-.17.19-.34.21-.62.07-1.67-.83-2.77-1.49-3.87-3.38-.29-.5.29-.46.84-1.54.09-.19.05-.36-.03-.5-.07-.14-.66-1.59-.9-2.17-.24-.57-.48-.49-.66-.5-.17 0-.36-.02-.55-.02s-.5.07-.77.36c-.26.29-1 1-1 2.43s1.03 2.82 1.17 3.01c.15.19 2.03 3.1 4.92 4.35 1.83.79 2.55.86 3.46.72.56-.08 1.7-.69 1.94-1.37.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.9.53 3.67 1.44 5.19L2 22l4.94-1.42A9.95 9.95 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.74 0-3.36-.49-4.74-1.34l-.34-.2-3.5.85.87-3.38-.22-.35A7.97 7.97 0 014 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8z"/></svg>Chat on WhatsApp to arrange</a>
+      <a class="consol-wa" href="https://wa.me/254758663108?text=Hello%20MRAN%20Logistics%2C%20I%20would%20like%20to%20arrange%20consolidation%20for%20my%20shipment." target="_blank"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.47 14.38c-.29-.15-1.7-.84-1.96-.93-.27-.1-.46-.15-.66.15-.19.29-.75.93-.92 1.13-.17.19-.34.21-.62.07-1.67-.83-2.77-1.49-3.87-3.38-.29-.5.29-.46.84-1.54.09-.19.05-.36-.03-.5-.07-.14-.66-1.59-.9-2.17-.24-.57-.48-.49-.66-.5-.17 0-.36-.02-.55-.02s-.5.07-.77.36c-.26.29-1 1-1 2.43s1.03 2.82 1.17 3.01c.15.19 2.03 3.1 4.92 4.35 1.83.79 2.55.86 3.46.72.56-.08 1.7-.69 1.94-1.37.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.9.53 3.67 1.44 5.19L2 22l4.94-1.42A9.95 9.95 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.74 0-3.36-.49-4.74-1.34l-.34-.2-3.5.85.87-3.38-.22-.35A7.97 7.97 0 014 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8z"/></svg>Chat on WhatsApp to arrange</a>
     </div>
   </div>
 </div>
@@ -785,7 +927,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
 <div class="wa-card">
   <div class="wa-icon-wrap"><svg viewBox="0 0 32 32" fill="var(--wa)"><path d="M16 2C8.27 2 2 8.27 2 16c0 2.48.67 4.8 1.83 6.8L2 30l7.4-1.8A13.93 13.93 0 0016 30c7.73 0 14-6.27 14-14S23.73 2 16 2zm0 25.4c-2.17 0-4.2-.57-5.96-1.57l-.42-.25-4.4 1.07 1.1-4.27-.28-.44A11.4 11.4 0 014.6 16C4.6 9.7 9.7 4.6 16 4.6S27.4 9.7 27.4 16 22.3 27.4 16 27.4zm6.27-8.5c-.34-.17-2.03-1-2.35-1.12-.32-.1-.55-.17-.78.18-.23.34-.9 1.12-1.1 1.35-.2.22-.4.25-.74.08-.34-.17-1.44-.53-2.74-1.7-1.01-.9-1.7-2.02-1.9-2.36-.2-.34-.02-.52.15-.7.15-.15.34-.4.51-.6.17-.2.23-.34.34-.57.11-.22.06-.43-.03-.6-.08-.17-.78-1.88-1.07-2.57-.28-.67-.57-.58-.78-.59h-.66c-.22 0-.58.08-.88.4-.3.34-1 1-1 2.43s1.03 2.82 1.35 3.41c.17.22 2.34 3.57 5.67 5 .79.34 1.41.54 1.89.69.79.25 1.51.22 2.08.13.63-.1 1.95-.8 2.22-1.57.28-.77.28-1.43.2-1.57-.09-.13-.3-.22-.63-.39z"/></svg></div>
   <div class="wa-info"><div class="wa-title">Get a Quote on WhatsApp</div><div class="wa-desc">Have questions or need a custom shipping quote? Our team is ready to help — fast, friendly, and personal.</div></div>
-  <a class="wa-btn" href="https://wa.me/254725041080?text=Hello%20MRAN%20Logistics%2C%20I%20would%20like%20to%20get%20an%20air%20freight%20quote." target="_blank"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.29-.15-1.7-.84-1.96-.93-.27-.1-.46-.15-.66.15-.19.29-.75.93-.92 1.13-.17.19-.34.21-.62.07-1.67-.83-2.77-1.49-3.87-3.38-.29-.5.29-.46.84-1.54.09-.19.05-.36-.03-.5-.07-.14-.66-1.59-.9-2.17-.24-.57-.48-.49-.66-.5-.17 0-.36-.02-.55-.02s-.5.07-.77.36c-.26.29-1 1-1 2.43s1.03 2.82 1.17 3.01c.15.19 2.03 3.1 4.92 4.35 1.83.79 2.55.86 3.46.72.56-.08 1.7-.69 1.94-1.37.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.9.53 3.67 1.44 5.19L2 22l4.94-1.42A9.95 9.95 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.74 0-3.36-.49-4.74-1.34l-.34-.2-3.5.85.87-3.38-.22-.35A7.97 7.97 0 014 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8z"/></svg>Chat on WhatsApp</a>
+  <a class="wa-btn" href="https://wa.me/254758663108?text=Hello%20MRAN%20Logistics%2C%20I%20would%20like%20to%20get%20an%20air%20freight%20quote." target="_blank"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.29-.15-1.7-.84-1.96-.93-.27-.1-.46-.15-.66.15-.19.29-.75.93-.92 1.13-.17.19-.34.21-.62.07-1.67-.83-2.77-1.49-3.87-3.38-.29-.5.29-.46.84-1.54.09-.19.05-.36-.03-.5-.07-.14-.66-1.59-.9-2.17-.24-.57-.48-.49-.66-.5-.17 0-.36-.02-.55-.02s-.5.07-.77.36c-.26.29-1 1-1 2.43s1.03 2.82 1.17 3.01c.15.19 2.03 3.1 4.92 4.35 1.83.79 2.55.86 3.46.72.56-.08 1.7-.69 1.94-1.37.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.9.53 3.67 1.44 5.19L2 22l4.94-1.42A9.95 9.95 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.74 0-3.36-.49-4.74-1.34l-.34-.2-3.5.85.87-3.38-.22-.35A7.97 7.97 0 014 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8z"/></svg>Chat on WhatsApp</a>
 </div>
 
 </div><!-- /air-wrap -->
@@ -930,12 +1072,59 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
     <div class="wa-card">
       <div class="wa-icon-wrap"><svg viewBox="0 0 32 32" fill="var(--wa)"><path d="M16 2C8.27 2 2 8.27 2 16c0 2.48.67 4.8 1.83 6.8L2 30l7.4-1.8A13.93 13.93 0 0016 30c7.73 0 14-6.27 14-14S23.73 2 16 2zm0 25.4c-2.17 0-4.2-.57-5.96-1.57l-.42-.25-4.4 1.07 1.1-4.27-.28-.44A11.4 11.4 0 014.6 16C4.6 9.7 9.7 4.6 16 4.6S27.4 9.7 27.4 16 22.3 27.4 16 27.4zm6.27-8.5c-.34-.17-2.03-1-2.35-1.12-.32-.1-.55-.17-.78.18-.23.34-.9 1.12-1.1 1.35-.2.22-.4.25-.74.08-.34-.17-1.44-.53-2.74-1.7-1.01-.9-1.7-2.02-1.9-2.36-.2-.34-.02-.52.15-.7.15-.15.34-.4.51-.6.17-.2.23-.34.34-.57.11-.22.06-.43-.03-.6-.08-.17-.78-1.88-1.07-2.57-.28-.67-.57-.58-.78-.59h-.66c-.22 0-.58.08-.88.4-.3.34-1 1-1 2.43s1.03 2.82 1.35 3.41c.17.22 2.34 3.57 5.67 5 .79.34 1.41.54 1.89.69.79.25 1.51.22 2.08.13.63-.1 1.95-.8 2.22-1.57.28-.77.28-1.43.2-1.57-.09-.13-.3-.22-.63-.39z"/></svg></div>
       <div class="wa-info"><div class="wa-title">Ocean Shipping Enquiry</div><div class="wa-desc">Ready to ship a large item or need a custom ocean freight quote? Chat with us now.</div></div>
-      <a class="wa-btn" href="https://wa.me/254725041080?text=Hello%20MRAN%20Logistics%2C%20I%20would%20like%20to%20get%20an%20ocean%20shipping%20quote." target="_blank"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.29-.15-1.7-.84-1.96-.93-.27-.1-.46-.15-.66.15-.19.29-.75.93-.92 1.13-.17.19-.34.21-.62.07-1.67-.83-2.77-1.49-3.87-3.38-.29-.5.29-.46.84-1.54.09-.19.05-.36-.03-.5-.07-.14-.66-1.59-.9-2.17-.24-.57-.48-.49-.66-.5-.17 0-.36-.02-.55-.02s-.5.07-.77.36c-.26.29-1 1-1 2.43s1.03 2.82 1.17 3.01c.15.19 2.03 3.1 4.92 4.35 1.83.79 2.55.86 3.46.72.56-.08 1.7-.69 1.94-1.37.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.9.53 3.67 1.44 5.19L2 22l4.94-1.42A9.95 9.95 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.74 0-3.36-.49-4.74-1.34l-.34-.2-3.5.85.87-3.38-.22-.35A7.97 7.97 0 014 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8z"/></svg>Chat on WhatsApp</a>
+      <a class="wa-btn" href="https://wa.me/254758663108?text=Hello%20MRAN%20Logistics%2C%20I%20would%20like%20to%20get%20an%20ocean%20shipping%20quote." target="_blank"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.29-.15-1.7-.84-1.96-.93-.27-.1-.46-.15-.66.15-.19.29-.75.93-.92 1.13-.17.19-.34.21-.62.07-1.67-.83-2.77-1.49-3.87-3.38-.29-.5.29-.46.84-1.54.09-.19.05-.36-.03-.5-.07-.14-.66-1.59-.9-2.17-.24-.57-.48-.49-.66-.5-.17 0-.36-.02-.55-.02s-.5.07-.77.36c-.26.29-1 1-1 2.43s1.03 2.82 1.17 3.01c.15.19 2.03 3.1 4.92 4.35 1.83.79 2.55.86 3.46.72.56-.08 1.7-.69 1.94-1.37.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.9.53 3.67 1.44 5.19L2 22l4.94-1.42A9.95 9.95 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.74 0-3.36-.49-4.74-1.34l-.34-.2-3.5.85.87-3.38-.22-.35A7.97 7.97 0 014 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8z"/></svg>Chat on WhatsApp</a>
     </div>
   </div>
 
 </div><!-- /ocean-wrap -->
 </div><!-- /panel-ocean -->
+
+<!-- TESTIMONIALS -->
+<div class="testi-section">
+  <div class="testi-inner">
+    <div class="testi-kicker">What Our Clients Say</div>
+    <h2 class="testi-heading">Trusted by Kenyans Across the Country</h2>
+    <div class="testi-grid">
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"Very transparent and the customer experience was perfect."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">Z</div>
+          <div>
+            <div class="testi-name">Zablon</div>
+            <div class="testi-role">Air Freight Client</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card testi-card--featured">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"I will definitely recommend them any day. Outstanding service from start to finish."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">W</div>
+          <div>
+            <div class="testi-name">Wilkista</div>
+            <div class="testi-role">Verified Client</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="testi-card">
+        <div class="testi-stars">★★★★★</div>
+        <div class="testi-quote">"I love how quick they respond to their clients. Always available when you need them."</div>
+        <div class="testi-author">
+          <div class="testi-avatar">I</div>
+          <div>
+            <div class="testi-name">Irene</div>
+            <div class="testi-role">Loyal Client</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <div class="footer">
@@ -1036,7 +1225,7 @@ function printQuote() {
       <div class="total-kes"><span>Total Amount (KES)</span><span>${kes}</span></div>
       <div class="foot">
         MRAN Logistics · 17401 Nichols Ln Ste J, Huntington Beach, CA 92647<br>
-        +1 657 215 7361 · +254 725 041 080<br>
+        +1 657 215 7361 · +254 758 663 108<br>
         This is an estimate only. Final charges may vary based on actual measurements at our warehouse.
       </div>
     </div>
@@ -1073,6 +1262,56 @@ function switchTab(tab) {
 }
 
 /* ── AIR FREIGHT JS ── */
+function convertLbs() {
+  const lbs = parseFloat(document.getElementById('lbsInput').value);
+  const kgOut = document.getElementById('kgOutput');
+  const btn = document.getElementById('useInCalcBtn');
+  const note = document.getElementById('convNote');
+  if (!lbs || lbs <= 0) {
+    kgOut.value = '';
+    btn.style.display = 'none';
+    note.style.display = 'none';
+    return;
+  }
+  const kg = (lbs / 2.20462).toFixed(2);
+  kgOut.value = kg;
+  btn.style.display = 'block';
+  note.style.display = 'block';
+  note.innerHTML = `💡 <strong>${lbs} lbs = ${kg} kg</strong> — enter <strong>${kg}</strong> as the actual weight in the calculator below.`;
+}
+
+function useInCalculator() {
+  const kg = document.getElementById('kgOutput').value;
+  if (!kg) return;
+  // Scroll to calculator
+  document.querySelector('#pkgList').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Fill in the first package weight field
+  setTimeout(() => {
+    const wtField = document.getElementById('wt-1');
+    if (wtField) {
+      wtField.value = kg;
+      wtField.focus();
+      wtField.style.borderColor = 'var(--orange)';
+      wtField.style.boxShadow = '0 0 0 3px rgba(232,98,10,0.15)';
+      setTimeout(() => {
+        wtField.style.borderColor = '';
+        wtField.style.boxShadow = '';
+      }, 2000);
+    }
+  }, 600);
+}
+
+function toggleRateInfo() {
+  document.getElementById('rateInfoPopup').classList.toggle('show');
+}
+// Close if clicking outside
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.rb-item') ) {
+    const p = document.getElementById('rateInfoPopup');
+    if (p) p.classList.remove('show');
+  }
+});
+
 let pkgCount = 0;
 
 function toggleAcc(btn) {
@@ -1371,11 +1610,11 @@ setCurrency('KES');
 .chat-input {
   flex:1; background:var(--navy3); border:1px solid var(--navy-light);
   border-radius:20px; padding:9px 14px;
-  font-family:var(--ff); font-size:13px; color:var(--text);
+  font-family:var(--ff); font-size:13px; color:#e8f2ff;
   outline:none; transition:border-color 0.15s;
 }
 .chat-input:focus { border-color:var(--orange); }
-.chat-input::placeholder { color:var(--ghost); }
+.chat-input::placeholder { color:rgba(255,255,255,0.35); }
 .chat-send {
   width:36px; height:36px; border-radius:50%;
   background:var(--orange); border:none;
@@ -1387,7 +1626,7 @@ setCurrency('KES');
 </style>
 
 <div class="fab-stack">
-  <a class="fab-wa" href="https://wa.me/254725041080?text=Hello%20MRAN%20Logistics%2C%20I%20have%20a%20question." target="_blank" title="WhatsApp us">
+  <a class="fab-wa" href="https://wa.me/254758663108?text=Hello%20MRAN%20Logistics%2C%20I%20have%20a%20question." target="_blank" title="WhatsApp us">
     <svg viewBox="0 0 24 24" fill="#fff"><path d="M17.47 14.38c-.29-.15-1.7-.84-1.96-.93-.27-.1-.46-.15-.66.15-.19.29-.75.93-.92 1.13-.17.19-.34.21-.62.07-1.67-.83-2.77-1.49-3.87-3.38-.29-.5.29-.46.84-1.54.09-.19.05-.36-.03-.5-.07-.14-.66-1.59-.9-2.17-.24-.57-.48-.49-.66-.5-.17 0-.36-.02-.55-.02s-.5.07-.77.36c-.26.29-1 1-1 2.43s1.03 2.82 1.17 3.01c.15.19 2.03 3.1 4.92 4.35 1.83.79 2.55.86 3.46.72.56-.08 1.7-.69 1.94-1.37.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.9.53 3.67 1.44 5.19L2 22l4.94-1.42A9.95 9.95 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.74 0-3.36-.49-4.74-1.34l-.34-.2-3.5.85.87-3.38-.22-.35A7.97 7.97 0 014 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8z"/></svg>
   </a>
   <button class="fab-chat" onclick="toggleChat()" title="Ask MRAN Assistant">
@@ -1427,20 +1666,23 @@ const FAQ = [
   { keys:['vape','vapes','vape pen','vape juice','e-cigarette'], a:`❌ **No.** Vape pens, vape juice, and all vaping accessories are **strictly prohibited** and cannot be shipped.` },
   { keys:['medicine','medication','prescription','pills','drugs','supplements','protein','vitamins'], a:`💊 **Medication** (OTC and prescription) is **prohibited** — we cannot ship medicines.<br><br>✅ **Supplements & protein powders** are allowed but **factory sealed in original packaging only.** Opened containers are not accepted.` },
   { keys:['perfume','cologne','fragrance'], a:`✅ **Yes** — perfumes are allowed, but **factory sealed in original packaging only.** Opened bottles are not accepted.` },
-  { keys:['consolidation','consolidate','combine','merge packages','multiple packages','bundle shipment'], a:`✅ **Yes!** MRAN offers consolidation for small non-hazardous items.<br><br>📦 Eligible: Hair & beauty · Books · Clothing · Skincare · Supplements · Toys · Home goods<br><br>WhatsApp us to arrange: **+254 725 041 080**` },
+  { keys:['consolidation','consolidate','combine','merge packages','multiple packages','bundle shipment'], a:`✅ **Yes!** MRAN offers consolidation for small non-hazardous items.<br><br>📦 Eligible: Hair & beauty · Books · Clothing · Skincare · Supplements · Toys · Home goods<br><br>WhatsApp us to arrange: **+254 758 663 108**` },
   { keys:['home delivery','deliver to my house','door to door','deliver nairobi','nairobi delivery'], a:`🏠 Yes! We offer **home delivery within Nairobi** for an additional **KES 450.**<br><br>Select this option in our shipping calculator on this page.` },
   { keys:['calculate','calculator','estimate','how much will','cost calculator','shipping cost'], a:`🧮 Use our **shipping calculator** on this page!<br><br>1. Click the ✈️ Air Freight tab<br>2. Enter package dimensions (inches) and weight (kg)<br>3. Hit "Calculate Shipping Cost"<br><br>It instantly shows your USD and KES total.` },
   { keys:['how does it work','how to ship','process','steps','get started','how do i start','how to use'], a:`Here's how it works:<br><br>1️⃣ Get our US address (shown on this page)<br>2️⃣ Shop at any US store online<br>3️⃣ Ship to our Huntington Beach warehouse — include your name<br>4️⃣ We receive your package and notify you<br>5️⃣ Pay your shipping invoice<br>6️⃣ Your package ships to Kenya ✈️` },
-  { keys:['contact','phone','whatsapp','reach','call','number'], a:`📞 **Kenya WhatsApp:** +254 725 041 080<br>📞 **US Warehouse:** +1 657 215 7361<br><br>WhatsApp is fastest — we usually reply within minutes! 💬` },
+  { keys:['exchange rate','rate kes','why 135','kes 135','129','130','rate today','forex','currency rate'],
+    a:`💱 The exchange rate used for estimates is <strong>KES 135 per USD</strong>.<br><br>This reflects the rate applied by our banking partner, which may differ from the Central Bank of Kenya's official rate.<br><br>The final invoice will use the rate at the time of payment — if rates change significantly, we'll notify you before confirming your order.` },
+  { keys:['contact','phone','whatsapp','reach','call','number'],
+    a:`📞 **Kenya WhatsApp:** +254 758 663 108<br>📞 **US Warehouse:** +1 657 215 7361<br><br>WhatsApp is fastest — we usually reply within minutes! 💬` },
   { keys:['customs','customs clearance','duty','tax','import','kra'], a:`🛃 We handle customs clearance for you!<br><br>• **Air freight:** $5 flat customs fee per shipment<br>• **Ocean shipping:** Customs included in the $33/ft³ rate<br><br>You don't need to deal with KRA — MRAN handles it all.` },
   { keys:['volumetric','volumetric weight','dimensional weight','chargeable weight'], a:`📐 **Volumetric weight** accounts for the space your package takes up.<br><br>Formula: **(L × W × H in inches) ÷ 366**<br><br>The **chargeable weight** is whichever is higher — actual or volumetric. Airlines always bill the greater of the two.` },
-  { keys:['tracking','track my package','track shipment','where is my package','track order'], a:`📦 Once your package ships, we'll send you a tracking number via WhatsApp.<br><br>For status updates, WhatsApp us at **+254 725 041 080** with your name and tracking number.` },
+  { keys:['tracking','track my package','track shipment','where is my package','track order'], a:`📦 Once your package ships, we'll send you a tracking number via WhatsApp.<br><br>For status updates, WhatsApp us at **+254 758 663 108** with your name and tracking number.` },
   { keys:['gun','weapon','knife','ammunition','ammo','firearm','taser'], a:`❌ All weapons are **strictly prohibited:**<br><br>• Guns, firearms & replicas<br>• Ammunition & explosives<br>• Tasers<br>• Knives (non-kitchen use)<br>• Pepper spray<br>• Military gear & tactical clothing` },
   { keys:['drone','uav','quadcopter','dji'], a:`❌ **No.** Drones and UAVs are **prohibited** and cannot be shipped via MRAN Logistics.` },
   { keys:['glass','ceramic','fragile','breakable'], a:`⚠️ Glass and ceramic items are **conditional** — shipped at **your own risk.**<br><br>MRAN accepts no liability for breakage during transit. Ensure items are very well packaged.` },
 ];
 
-const FALLBACK = `I don't have a specific answer for that, but our team can help! 💬<br><br>WhatsApp us at <strong>+254 725 041 080</strong> and we'll get back to you quickly.`;
+const FALLBACK = `I don't have a specific answer for that, but our team can help! 💬<br><br>WhatsApp us at <strong>+254 758 663 108</strong> and we'll get back to you quickly.`;
 const GREET = `Hey there! 👋 I'm the <strong>MRAN Logistics Assistant</strong>.<br><br>I can answer questions about shipping rates, our US address, prohibited items, delivery times, and more. What would you like to know?`;
 const QUICK_REPLIES = [
   {label:'✈️ Air freight rate', text:'What is the air freight rate?'},
@@ -1505,7 +1747,7 @@ function sendQuick(text) {
       <button class="qr" onclick="sendQuick('What is the air freight rate?')">✈️ Rates</button>
       <button class="qr" onclick="sendQuick('What is the US shipping address?')">📍 Address</button>
       <button class="qr" onclick="sendQuick('What items are prohibited?')">🚫 Prohibited</button>
-      <button class="qr" onclick="window.open('https://wa.me/254725041080','_blank')" style="background:rgba(37,211,102,0.12);border-color:rgba(37,211,102,0.3);color:#25d366;">💬 WhatsApp us</button>`;
+      <button class="qr" onclick="window.open('https://wa.me/254758663108','_blank')" style="background:rgba(37,211,102,0.12);border-color:rgba(37,211,102,0.3);color:#25d366;">💬 WhatsApp us</button>`;
   }, 600 + Math.random()*400);
 }
 
