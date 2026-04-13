@@ -1472,6 +1472,23 @@ function unlockAddress() {
     return;
   }
   errBox.style.display = 'none';
+
+  // ── Silently notify you via Formspree ──
+  // Replace YOUR_FORM_ID below with your actual Formspree form ID
+  const FORMSPREE_ID = 'mzdybkbg';
+  fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      name: name,
+      whatsapp: wa,
+      message: `New address request from ${name} — WhatsApp: ${wa}`,
+      page: 'MRAN Calculator — Address Gate',
+      time: new Date().toLocaleString('en-KE')
+    })
+  }).catch(() => {}); // Silent — client never sees any error
+
+  // Reveal address
   document.getElementById('addrName').textContent = name;
   document.getElementById('gateWelcomeName').textContent = name.split(' ')[0];
   document.getElementById('addrGate').style.display = 'none';
