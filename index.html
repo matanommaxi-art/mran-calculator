@@ -266,6 +266,27 @@ body {
 }
 .currency-btn.active { background: var(--navy); color: #fff; box-shadow: 0 2px 6px rgba(13,31,60,0.2); }
 
+/* ── REFERRAL BANNER ── */
+.referral-banner {
+  margin-top:12px; background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);
+  border:1px solid rgba(232,98,10,0.3); border-radius:var(--r-sm);
+  padding:16px; animation:slideUp 0.3s ease;
+}
+.referral-top { display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; }
+.referral-icon { font-size:1.8rem; flex-shrink:0; }
+.referral-title { font-family:var(--ffc); font-size:14px; font-weight:700; color:#fff; margin-bottom:4px; }
+.referral-desc { font-size:12px; color:var(--muted); line-height:1.5; }
+.referral-btn {
+  display:flex; align-items:center; gap:8px;
+  width:100%; padding:10px 14px;
+  background:#25d366; color:#fff; border:none;
+  border-radius:var(--r-sm); font-family:var(--ffc);
+  font-size:14px; font-weight:700; letter-spacing:0.04em;
+  cursor:pointer; transition:background 0.18s;
+  box-shadow:0 3px 12px rgba(37,211,102,0.25);
+}
+.referral-btn:hover { background:#1da853; }
+
 /* ── SEND TO MRAN BUTTON ── */
 .send-mran-btn {
   width:100%; padding:14px; margin-top:10px;
@@ -974,6 +995,21 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
       <div class="consol-tags"><span class="ctag">✂️ Hair &amp; Beauty</span><span class="ctag">📚 Books</span><span class="ctag">👗 Clothing</span><span class="ctag">🧴 Skincare</span><span class="ctag">💊 Supplements</span><span class="ctag">🧸 Toys</span><span class="ctag">🏠 Home Goods</span></div>
       <a class="consol-wa" href="https://wa.me/254758663108?text=Hello%20MRAN%20Logistics%2C%20I%20would%20like%20to%20arrange%20consolidation%20for%20my%20shipment." target="_blank"><svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.47 14.38c-.29-.15-1.7-.84-1.96-.93-.27-.1-.46-.15-.66.15-.19.29-.75.93-.92 1.13-.17.19-.34.21-.62.07-1.67-.83-2.77-1.49-3.87-3.38-.29-.5.29-.46.84-1.54.09-.19.05-.36-.03-.5-.07-.14-.66-1.59-.9-2.17-.24-.57-.48-.49-.66-.5-.17 0-.36-.02-.55-.02s-.5.07-.77.36c-.26.29-1 1-1 2.43s1.03 2.82 1.17 3.01c.15.19 2.03 3.1 4.92 4.35 1.83.79 2.55.86 3.46.72.56-.08 1.7-.69 1.94-1.37.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.9.53 3.67 1.44 5.19L2 22l4.94-1.42A9.95 9.95 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.74 0-3.36-.49-4.74-1.34l-.34-.2-3.5.85.87-3.38-.22-.35A7.97 7.97 0 014 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8z"/></svg>Chat on WhatsApp to arrange</a>
     </div>
+
+    <!-- Referral Banner -->
+    <div class="referral-banner" id="referralBanner" style="display:none;">
+      <div class="referral-top">
+        <div class="referral-icon">🎁</div>
+        <div class="referral-msg">
+          <div class="referral-title">Love MRAN Logistics? Share with a friend!</div>
+          <div class="referral-desc">Know someone who shops online in the US? Share MRAN and help them ship to Kenya easily.</div>
+        </div>
+      </div>
+      <button class="referral-btn" onclick="sendReferral()">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M17.47 14.38c-.29-.15-1.7-.84-1.96-.93-.27-.1-.46-.15-.66.15-.19.29-.75.93-.92 1.13-.17.19-.34.21-.62.07-1.67-.83-2.77-1.49-3.87-3.38-.29-.5.29-.46.84-1.54.09-.19.05-.36-.03-.5-.07-.14-.66-1.59-.9-2.17-.24-.57-.48-.49-.66-.5-.17 0-.36-.02-.55-.02s-.5.07-.77.36c-.26.29-1 1-1 2.43s1.03 2.82 1.17 3.01c.15.19 2.03 3.1 4.92 4.35 1.83.79 2.55.86 3.46.72.56-.08 1.7-.69 1.94-1.37.24-.67.24-1.24.17-1.36-.07-.12-.26-.19-.55-.33z"/><path d="M12 2C6.48 2 2 6.48 2 12c0 1.9.53 3.67 1.44 5.19L2 22l4.94-1.42A9.95 9.95 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.74 0-3.36-.49-4.74-1.34l-.34-.2-3.5.85.87-3.38-.22-.35A7.97 7.97 0 014 12c0-4.42 3.58-8 8-8s8 3.58 8 8-3.58 8-8 8z"/></svg>
+        Share MRAN on WhatsApp
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1220,25 +1256,62 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
     </div>
   </section>
 
+  <!-- Ocean Article -->
+  <section class="osec osec--light">
+    <div class="osec-kicker">About Our Ocean Freight Service</div>
+    <h2 class="osec-heading">Reliable Ocean Freight from the US to Kenya</h2>
+    <div style="max-width:680px;font-size:14px;color:var(--text2);line-height:1.9;">
+      <p style="margin-bottom:14px;">MRAN Logistics offers a reliable and cost-effective ocean freight service for customers looking to ship larger or bulkier items from the U.S. to Kenya. We are experienced at handling heavy cargo and serve both individual and business customers — from commercial inventory and equipment to personal household goods.</p>
+      <p style="margin-bottom:20px;">This section outlines everything you need to know about our ocean freight option, including pricing, schedules, timelines, and FAQs.</p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;">
+        <div style="background:rgba(232,98,10,0.08);border:1px solid rgba(232,98,10,0.2);border-radius:var(--r-sm);padding:14px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange);margin-bottom:6px;">Departure</div>
+          <div style="font-family:var(--ffc);font-size:18px;font-weight:800;color:var(--ink);">Every 2 Months</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px;">One container departs from the USA every two months</div>
+        </div>
+        <div style="background:rgba(232,98,10,0.08);border:1px solid rgba(232,98,10,0.2);border-radius:var(--r-sm);padding:14px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange);margin-bottom:6px;">Departure Day</div>
+          <div style="font-family:var(--ffc);font-size:18px;font-weight:800;color:var(--ink);">Last Wednesday</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px;">Of the scheduled departure month</div>
+        </div>
+        <div style="background:rgba(232,98,10,0.08);border:1px solid rgba(232,98,10,0.2);border-radius:var(--r-sm);padding:14px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange);margin-bottom:6px;">Cut-Off</div>
+          <div style="font-family:var(--ffc);font-size:18px;font-weight:800;color:var(--ink);">Friday Before</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px;">Cargo must arrive by Friday the week before departure</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(13,31,60,0.06);border-left:3px solid var(--orange);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:12px 16px;margin-bottom:20px;font-size:13px;color:var(--text2);">
+        💡 We publish a calendar of past, current, and upcoming containers including departure dates, arrival dates, and ETAs — updated regularly.
+      </div>
+
+      <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+        <strong style="color:var(--ink);">Delivery Timeline:</strong> Ocean shipments typically take <strong>75 to 120 calendar days</strong> from the date of container departure. This includes port handling time, customs clearance in Kenya, and final delivery to our Nairobi warehouse.<br><br>
+        We strongly recommend this option for customers who are <strong>not under time constraints</strong> and are looking to save on shipping costs.
+      </div>
+    </div>
+  </section>
+
   <!-- Container Tracker -->
   <section class="osec osec--dark">
     <div class="osec-kicker">Container Schedule</div>
-    <h2 class="osec-heading">Live Container Status Tracker</h2>
+    <h2 class="osec-heading">📌 2026 Ocean Shipping Schedule</h2>
     <div class="tracker-wrap">
       <table>
-        <thead><tr><th>Month</th><th>Date Departing</th><th>ETA</th><th>Status</th></tr></thead>
+        <thead><tr><th>Departure Date</th><th>Cut-Off Date</th><th>ETA to Kenya</th><th>Status</th></tr></thead>
         <tbody>
-          <tr><td>January</td><td>Jan 15, 2025</td><td>May 29, 2025</td><td><span class="tbadge tbadge-arrived">Arrived</span></td></tr>
-          <tr><td>February</td><td>Apr 30, 2025</td><td>Jul 31, 2025</td><td><span class="tbadge tbadge-transit">In Transit</span></td></tr>
-          <tr><td>March</td><td>Mar 10, 2025</td><td>May 20, 2025</td><td><span class="tbadge tbadge-transit">In Transit</span></td></tr>
-          <tr><td>April</td><td>Apr 30, 2025</td><td>Jul 31, 2025</td><td><span class="tbadge tbadge-transit">In Transit</span></td></tr>
-          <tr><td>May</td><td>May 7, 2025</td><td>Jul 29, 2025</td><td><span class="tbadge tbadge-transit">In Transit</span></td></tr>
-          <tr><td>June</td><td>Jun 25, 2025</td><td>Sep 25, 2025</td><td><span class="tbadge tbadge-departing">Departing</span></td></tr>
-          <tr><td>August</td><td>Aug 27, 2025</td><td>Nov 27, 2025</td><td><span class="tbadge tbadge-departing">Departing</span></td></tr>
-          <tr><td>October</td><td>Oct 8, 2025</td><td>Jan 1, 2026</td><td><span class="tbadge tbadge-departing">Departing</span></td></tr>
-          <tr><td>November</td><td>Nov 13, 2025</td><td>Feb 25, 2026</td><td><span class="tbadge tbadge-departing">Departing</span></td></tr>
+          <tr><td>Feb 25th, 2026</td><td>Feb 18th, 2026</td><td>On or before Jun 24th</td><td><span class="tbadge tbadge-arrived">Departed</span></td></tr>
+          <tr><td>Apr 29th, 2026</td><td>Apr 22nd, 2026</td><td>On or before Aug 26th</td><td><span class="tbadge tbadge-departing">Upcoming</span></td></tr>
+          <tr><td>Jun 24th, 2026</td><td>Jun 17th, 2026</td><td>On or before Oct 29th</td><td><span class="tbadge tbadge-departing">Upcoming</span></td></tr>
+          <tr><td>Aug 26th, 2026</td><td>Aug 19th, 2026</td><td>On or before Dec 30th</td><td><span class="tbadge tbadge-departing">Upcoming</span></td></tr>
+          <tr><td>Oct 28th, 2026</td><td>Oct 21st, 2026</td><td>On or before Jan 28th, 2027</td><td><span class="tbadge tbadge-departing">Upcoming</span></td></tr>
+          <tr><td>Dec 30th, 2026</td><td>Dec 23rd, 2026</td><td>On or before Apr 29th, 2027</td><td><span class="tbadge tbadge-departing">Upcoming</span></td></tr>
         </tbody>
       </table>
+    </div>
+    <div style="margin-top:14px;font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6;">
+      ⚠️ Cargo cut-off is the <strong style="color:rgba(255,255,255,0.6);">Friday before</strong> the departure date. Items must arrive at our US warehouse before the cut-off to make the container.
     </div>
   </section>
 
@@ -1320,6 +1393,12 @@ function setCurrency(c) {
   document.getElementById('btnUSD').classList.toggle('active', c === 'USD');
   document.getElementById('totalUsdRow').style.display = c === 'USD' ? 'flex' : 'none';
   document.getElementById('totalKesRow').style.display = c === 'KES' ? 'flex' : 'none';
+}
+
+function sendReferral() {
+  const client = document.getElementById('clientName').value.trim();
+  const msg = `Hey! 👋 I've been using *MRAN Logistics* to ship items from the US to Kenya and it's been great!\n\n✈️ Fast air freight — 7–15 business days\n💰 Transparent pricing — $15/kg\n📦 They handle everything including customs\n\nCheck out their shipping calculator here:\n👉 https://matanommaxi-art.github.io/mran-calculator\n\nHighly recommend! 🇺🇸🇰🇪`;
+  window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 function sendToMRAN() {
@@ -1838,6 +1917,7 @@ function calculate() {
   setCurrency(activeCurrency);
   resultsWrap.classList.add('show');
   document.getElementById('consolBanner').style.display='block';
+  document.getElementById('referralBanner').style.display='block';
   setTimeout(()=>resultsWrap.scrollIntoView({behavior:'smooth',block:'nearest'}),60);
 }
 
