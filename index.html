@@ -4,6 +4,14 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MRAN Logistics – Air Freight &amp; Ocean Shipping</title>
+<!-- Google Analytics — replace G-XXXXXXXXXX with your Measurement ID -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script> -->
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════
@@ -63,7 +71,33 @@ body {
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
+  padding-top: 38px;
 }
+
+/* ── NOTICE BAR ── */
+.notice-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 2000;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 9px 40px 9px 16px;
+  font-family: var(--ff); font-size: 12px; font-weight: 500;
+  line-height: 1.5; text-align: center;
+  transition: transform 0.3s ease;
+  animation: slideDown 0.4s ease;
+}
+.notice-bar.open   { background: rgba(22,101,52,0.96); color: #d1fae5; border-bottom: 1px solid rgba(34,197,94,0.3); }
+.notice-bar.closed { background: rgba(127,29,29,0.96); color: #fee2e2; border-bottom: 1px solid rgba(239,68,68,0.3); }
+.notice-bar.hidden { transform: translateY(-100%); pointer-events: none; }
+.notice-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; animation: noticePulse 2s infinite; }
+.notice-bar.open   .notice-dot { background: #4ade80; }
+.notice-bar.closed .notice-dot { background: #f87171; }
+.notice-dismiss {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: inherit; opacity: 0.6;
+  font-size: 18px; cursor: pointer; line-height: 1; transition: opacity 0.15s;
+}
+.notice-dismiss:hover { opacity: 1; }
+@keyframes slideDown { from{transform:translateY(-100%)} to{transform:translateY(0)} }
+@keyframes noticePulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
 
 /* ═══════════════════════════════
    TOP BAR
@@ -650,6 +684,32 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
 .tbadge-transit{background:rgba(26,74,122,0.4);color:#7ab8f5;}
 .tbadge-departing{background:rgba(232,201,122,0.15);color:var(--sand);}
 
+/* ─── FAQ SECTION ─── */
+.faq-section { background:var(--bg); padding:56px 24px; border-top:1px solid var(--line); }
+.faq-inner { max-width:760px; margin:0 auto; }
+.faq-list { display:flex; flex-direction:column; gap:0; margin-top:28px; border:1px solid var(--line); border-radius:var(--r); overflow:hidden; }
+.faq-item { border-bottom:1px solid var(--line); }
+.faq-item:last-child { border-bottom:none; }
+.faq-q {
+  width:100%; display:flex; align-items:center; justify-content:space-between;
+  padding:16px 20px; background:var(--card);
+  font-family:var(--ff); font-size:14px; font-weight:600;
+  color:var(--text); text-align:left; border:none; cursor:pointer;
+  transition:background 0.15s; gap:12px;
+}
+.faq-q:hover { background:rgba(255,255,255,0.06); }
+.faq-q.open { background:rgba(232,98,10,0.08); color:#fff; }
+.faq-icon { font-size:20px; font-weight:300; color:var(--orange); flex-shrink:0; transition:transform 0.2s; }
+.faq-q.open .faq-icon { transform:rotate(45deg); }
+.faq-a {
+  display:none; padding:14px 20px 18px;
+  font-size:13px; color:var(--text2); line-height:1.8;
+  background:rgba(0,0,0,0.15);
+  border-top:1px solid var(--line);
+}
+.faq-a.open { display:block; }
+.faq-a strong { color:var(--text); }
+
 /* ─── TESTIMONIALS ─── */
 .testi-section {
   background: var(--bg);
@@ -762,13 +822,18 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
 </head>
 <body>
 
+<!-- NOTICE BAR -->
+<div class="notice-bar" id="noticeBar">
+  <div class="notice-dot"></div>
+  <span id="noticeText"></span>
+  <button class="notice-dismiss" onclick="dismissNotice()" title="Dismiss">×</button>
+</div>
+
 <!-- ── TOP BAR ── -->
 <div class="topbar">
   <div class="topbar-left">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-    Huntington Beach, CA
-    <div class="topbar-divider"></div>
-    US to Kenya Shipping
+    🇺🇸 → 🇰🇪 US to Kenya Shipping
   </div>
   <div class="topbar-right">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
@@ -1124,7 +1189,6 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
           <div class="al">City</div><div class="av">Huntington Beach</div>
           <div class="al">State / ZIP</div><div class="av">California 92647</div>
           <div class="al">Country</div><div class="av">United States</div>
-          <div class="al">Phone</div><div class="av" style="font-family:var(--mono)">+1 657 215 7361</div>
         </div>
         <button class="copy-btn" id="copyBtn" onclick="copyAddr()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy Full Address</button>
       </div>
@@ -1327,6 +1391,80 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
 </div><!-- /ocean-wrap -->
 </div><!-- /panel-ocean -->
 
+<!-- FAQ SECTION -->
+<div class="faq-section">
+  <div class="faq-inner">
+    <div class="testi-kicker">Got Questions?</div>
+    <h2 class="testi-heading">Frequently Asked Questions</h2>
+    <div class="faq-list" id="faqList">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          What is the air freight rate? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Our air freight rate is <strong>$15 per kg</strong> based on actual or volumetric weight — whichever is higher. Minimum charge is $15. A <strong>$5 customs clearance fee</strong> applies per package. Exchange rate used: KES 135 per USD.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          When do you dispatch packages? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">We dispatch every <strong>Wednesday</strong>. If your package arrives Monday or Tuesday, it ships that Wednesday. If it arrives Thursday or Friday, it ships the following Wednesday. Weekend arrivals are not accepted — we reopen Monday.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          How long does air freight take? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Air freight typically takes <strong>7–15 business days</strong> from the date of dispatch. Weekends are excluded. Delivery is subject to customs clearance in Kenya.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          What is volumetric weight? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Volumetric weight accounts for the space your package takes up. Formula: <strong>(L × W × H in inches) ÷ 366</strong>. The chargeable weight is whichever is higher — actual or volumetric. Use our calculator above to check instantly.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          How do I pay? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">We accept <strong>M-Pesa</strong> via Till Number: <strong>6798004</strong>.<br>1. Go to M-Pesa → Lipa na M-Pesa → Buy Goods & Services<br>2. Enter Till: <strong>6798004</strong><br>3. Enter your KES amount<br>4. Send M-Pesa confirmation SMS to WhatsApp: <strong>+254 758 663 108</strong><br><br>Please pay immediately after receiving your invoice.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          What items are prohibited? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Prohibited items include: powerbanks, loose batteries, vapes, weapons, ammunition, aerosol cans, gas cylinders, fireworks, alcohol, medication, live animals, perishable food, currency, drones, and more. Conditional items (perfumes, supplements) must be factory sealed. See the full list in the Prohibited Items section above.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          Do you offer consolidation? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Yes! We consolidate small non-hazardous items like hair & beauty products, clothing, skincare, supplements, books, toys, and home goods. Electronics (phones, laptops) are <strong>not consolidated</strong> — each item is shipped and billed separately. WhatsApp us to arrange: <strong>+254 758 663 108</strong></div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          What are your business hours? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">We operate <strong>Monday to Friday, 9am–5pm PT (California time)</strong>. We are closed on weekends and public holidays. We do not receive packages on weekends. If you have an urgent enquiry, WhatsApp us at <strong>+254 758 663 108</strong> and we'll respond on the next business day.</div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFAQ(this)">
+          How does ocean shipping work? <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a">Ocean shipping is priced at <strong>$33 per cubic foot</strong> — all-inclusive with customs. Delivery takes <strong>75–120 days</strong>. We depart every two months on the last Wednesday of the scheduled month. Great for heavy or bulky items. See the Ocean Shipping tab for the full 2026 schedule.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- TESTIMONIALS -->
 <div class="testi-section">
   <div class="testi-inner">
@@ -1377,11 +1515,61 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
 <!-- FOOTER -->
 <div class="footer">
   <div class="footer-brand">MRAN <span>LOGISTICS</span></div>
-  <div class="footer-line">Air Freight &amp; Ocean Shipping — US to Kenya &nbsp;|&nbsp; 17401 Nichols Ln Ste J, Huntington Beach, CA 92647 &nbsp;|&nbsp; <span class="footer-phone">+1 657 215 7361</span></div>
+  <div class="footer-line">Air Freight &amp; Ocean Shipping — US to Kenya &nbsp;|&nbsp; <span class="footer-phone">+254 758 663 108</span></div>
   <div class="footer-line" style="margin-top:4px;font-size:11px;">Rates effective 2025 · Estimates only — final charges may vary based on actual measurements at our warehouse.</div>
+  <div id="bizBar" style="margin-top:10px;margin-right:120px;padding:8px 16px;border-radius:20px;border:1px solid rgba(255,255,255,0.08);font-family:var(--ff);font-size:12px;font-weight:500;color:#dce4ee;display:inline-block;transition:all 0.3s;line-height:1.8;">Loading hours...</div>
 </div>
 
 <script>
+/* ── BUSINESS HOURS (EAT + California Time) ── */
+function updateBizHours() {
+  const now = new Date();
+
+  // California time
+  const caTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+  const caDay = caTime.getDay();
+  const caHour = caTime.getHours();
+  const caTimeStr = caTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
+
+  // Nairobi time
+  const eatTime = new Date(now.toLocaleString('en-US', { timeZone: 'Africa/Nairobi' }));
+  const eatTimeStr = eatTime.toLocaleTimeString('en-KE', { hour: '2-digit', minute: '2-digit' });
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const eatDay = days[eatTime.getDay()];
+  const caDay2 = days[caDay];
+
+  // Open = Mon-Fri 9am-5pm California time
+  const isWeekday = caDay >= 1 && caDay <= 5;
+  const isOpenHour = caHour >= 9 && caHour < 17;
+  const isOpen = isWeekday && isOpenHour;
+
+  const bar = document.getElementById('bizBar');
+  if (!bar) return;
+
+  const timeInfo = `<span style="color:rgba(255,255,255,0.5);font-size:10px;">🇰🇪 ${eatDay} ${eatTimeStr} EAT &nbsp;·&nbsp; 🇺🇸 ${caDay2} ${caTimeStr}</span>`;
+
+  if (isOpen) {
+    bar.style.background = 'rgba(46,204,113,0.08)';
+    bar.style.borderColor = 'rgba(46,204,113,0.3)';
+    bar.innerHTML = `🟢 <strong style="color:#2ecc71;">We are open</strong> <span style="color:#dce4ee;">&nbsp;·&nbsp; Deliveries Mon–Fri, 9am–5pm PT &nbsp;·&nbsp; Closed weekends & holidays</span> &nbsp;&nbsp; ${timeInfo}`;
+  } else if (!isWeekday) {
+    bar.style.background = 'rgba(231,76,60,0.08)';
+    bar.style.borderColor = 'rgba(231,76,60,0.3)';
+    bar.innerHTML = `🔴 <strong style="color:#e74c3c;">Closed — Weekend</strong> <span style="color:#dce4ee;">&nbsp;·&nbsp; We reopen <strong style="color:#fff;">Monday at 9:00 AM PT</strong> &nbsp;·&nbsp; Deliveries: Mon–Fri, 9am–5pm</span> &nbsp;&nbsp; ${timeInfo}`;
+  } else if (caHour < 9) {
+    bar.style.background = 'rgba(232,98,10,0.08)';
+    bar.style.borderColor = 'rgba(232,98,10,0.3)';
+    bar.innerHTML = `🕘 <strong style="color:var(--orange2);">Not open yet</strong> <span style="color:#dce4ee;">&nbsp;·&nbsp; We open today at <strong style="color:#fff;">9:00 AM PT</strong> &nbsp;·&nbsp; Deliveries: Mon–Fri, 9am–5pm</span> &nbsp;&nbsp; ${timeInfo}`;
+  } else {
+    bar.style.background = 'rgba(231,76,60,0.08)';
+    bar.style.borderColor = 'rgba(231,76,60,0.3)';
+    bar.innerHTML = `🔴 <strong style="color:#e74c3c;">Closed for today</strong> <span style="color:#dce4ee;">&nbsp;·&nbsp; We reopen <strong style="color:#fff;">Monday at 9:00 AM PT</strong> &nbsp;·&nbsp; Deliveries: Mon–Fri, 9am–5pm</span> &nbsp;&nbsp; ${timeInfo}`;
+  }
+}
+
+updateBizHours();
+setInterval(updateBizHours, 60000);
+
 /* ── CURRENCY ── */
 let activeCurrency = 'KES';
 let lastTotalUsd = 0;
@@ -1533,7 +1721,7 @@ function printQuote() {
       </div>
       <div class="foot">
         MRAN Logistics · 17401 Nichols Ln Ste J, Huntington Beach, CA 92647<br>
-        +1 657 215 7361 · +254 758 663 108<br>
+        +254 758 663 108<br>
         This is an estimate only. Final charges may vary based on actual measurements at our warehouse.
       </div>
     </div>
@@ -1713,6 +1901,15 @@ function scrollToAddrGate() {
   }, 400);
 }
 
+function toggleFAQ(btn) {
+  const answer = btn.nextElementSibling;
+  const isOpen = btn.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-q').forEach(b => { b.classList.remove('open'); b.nextElementSibling.classList.remove('open'); });
+  // Open clicked if it was closed
+  if (!isOpen) { btn.classList.add('open'); answer.classList.add('open'); }
+}
+
 /* ── TRACK PACKAGE ── */
 function trackPackage() {
   const raw = document.getElementById('trackInput').value.trim().toUpperCase().replace(/\s/g,'');
@@ -1827,7 +2024,7 @@ function syncName() {
 
 function copyAddr() {
   const name = document.getElementById('clientName').value.trim() || '[Your Name]';
-  const text = `MRAN Logistics — ${name}\n17401 Nichols Ln Ste J\nHuntington Beach, CA 92647\nUnited States\nPhone: +1 657 215 7361`;
+  const text = `MRAN Logistics — ${name}\n17401 Nichols Ln Ste J\nHuntington Beach, CA 92647\nUnited States`;
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.getElementById('copyBtn');
     btn.classList.add('copied');
@@ -1916,6 +2113,73 @@ function calculate() {
   lastTotalKes = totalKes;
   setCurrency(activeCurrency);
   resultsWrap.classList.add('show');
+  // ── ESTIMATED ARRIVAL DATE ──
+  const today = new Date();
+  const todayDay = today.getDay(); // 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat
+
+  // Find next dispatch Wednesday
+  let daysToWed;
+  if (todayDay === 0 || todayDay === 6) {
+    // Weekend — treat as Monday arrival, dispatch that Wednesday
+    daysToWed = todayDay === 0 ? 3 : 4; // Sun→3days, Sat→4days to Mon then Wed
+  } else if (todayDay === 1) { // Monday
+    daysToWed = 2;
+  } else if (todayDay === 2) { // Tuesday
+    daysToWed = 1;
+  } else { // Wed/Thu/Fri → next Wednesday
+    daysToWed = (3 - todayDay + 7) % 7 || 7;
+  }
+
+  const dispatchDate = new Date(today);
+  dispatchDate.setDate(today.getDate() + daysToWed);
+
+  // Add 7 and 15 business days from dispatch (skip weekends)
+  function addBusinessDays(startDate, days) {
+    const result = new Date(startDate);
+    let added = 0;
+    while (added < days) {
+      result.setDate(result.getDate() + 1);
+      const d = result.getDay();
+      if (d !== 0 && d !== 6) added++; // Skip Sat & Sun
+    }
+    return result;
+  }
+
+  const earlyDate = addBusinessDays(dispatchDate, 7);
+  const lateDate  = addBusinessDays(dispatchDate, 15);
+
+  const fmt = d => d.toLocaleDateString('en-KE', { day: 'numeric', month: 'short', year: 'numeric' });
+  const fmtShort = d => d.toLocaleDateString('en-KE', { day: 'numeric', month: 'short' });
+
+  // Show estimated arrival below results
+  const existingETA = document.getElementById('etaBanner');
+  if (existingETA) existingETA.remove();
+
+  const etaDiv = document.createElement('div');
+  etaDiv.id = 'etaBanner';
+  etaDiv.style.cssText = `
+    margin-top:12px; padding:14px 16px;
+    background:linear-gradient(135deg,rgba(13,31,60,0.8),rgba(26,47,80,0.8));
+    border:1px solid var(--navy-light); border-left:3px solid var(--orange);
+    border-radius:var(--r-sm); font-size:13px; line-height:1.8;
+  `;
+  etaDiv.innerHTML = `
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange);margin-bottom:6px;">📅 Estimated Delivery Window</div>
+    <div style="color:var(--text);">
+      ✈️ <strong>Dispatch:</strong> <span style="color:#fff;">Wed, ${fmt(dispatchDate)}</span>
+      ${todayDay === 3 ? `<span style="font-size:10px;color:var(--muted);"> (Wed arrivals not guaranteed same week)</span>` : ''}
+    </div>
+    <div style="color:var(--text);margin-top:4px;">
+      🇰🇪 <strong>Estimated Arrival:</strong> <span style="color:var(--orange2);font-weight:700;">${fmtShort(earlyDate)} – ${fmt(lateDate)}</span>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:6px;">
+      ⏱️ 7–15 business days from dispatch · Weekends excluded · Subject to customs clearance
+    </div>
+  `;
+
+  const resultsWrapEl = document.getElementById('resultsWrap');
+  resultsWrapEl.appendChild(etaDiv);
+
   document.getElementById('consolBanner').style.display='block';
   document.getElementById('referralBanner').style.display='block';
   setTimeout(()=>resultsWrap.scrollIntoView({behavior:'smooth',block:'nearest'}),60);
@@ -1950,7 +2214,7 @@ function toggleOceanAddr() {
 }
 
 function copyOceanAddr() {
-  const text = `MRAN Logistics — [Your Name]\n17401 Nichols Ln Ste J\nHuntington Beach, CA 92647\nUnited States\nPhone: +1 657 215 7361`;
+  const text = `MRAN Logistics — [Your Name]\n17401 Nichols Ln Ste J\nHuntington Beach, CA 92647\nUnited States`;
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.getElementById('oceanCopyBtn');
     btn.classList.add('copied');
@@ -1960,6 +2224,35 @@ function copyOceanAddr() {
       btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy Full Address`;
     }, 2500);
   });
+}
+
+/* ── NOTICE BAR ── */
+(function() {
+  const bar  = document.getElementById('noticeBar');
+  const text = document.getElementById('noticeText');
+  const now  = new Date();
+  const day  = now.getDay(); // 0=Sun, 6=Sat
+  const hr   = now.getHours();
+  const isWeekend = day === 0 || day === 6;
+  const isOpen = !isWeekend && hr >= 9 && hr < 17;
+
+  if (isWeekend) {
+    bar.className = 'notice-bar closed';
+    text.innerHTML = `🔴 We're currently <strong>closed</strong>. We reopen Monday at 9:00 AM EAT. WhatsApp us and we'll respond first thing Monday! 💬`;
+  } else if (!isOpen && hr < 9) {
+    bar.className = 'notice-bar closed';
+    text.innerHTML = `🕘 We open today at <strong>9:00 AM EAT</strong>. Deliveries: Mon–Fri, 9am–5pm. Closed weekends & holidays.`;
+  } else if (!isOpen && hr >= 17) {
+    bar.className = 'notice-bar closed';
+    text.innerHTML = `🌙 We're <strong>closed</strong> for today. We reopen tomorrow at 9:00 AM EAT. WhatsApp us and we'll respond in the morning! 💬`;
+  } else {
+    bar.className = 'notice-bar open';
+    text.innerHTML = `🟢 We're <strong>open!</strong> Deliveries: Mon–Fri, 9:00 AM – 5:00 PM EAT. Closed weekends & public holidays.`;
+  }
+})();
+
+function dismissNotice() {
+  document.getElementById('noticeBar').classList.add('hidden');
 }
 
 /* ── INIT ── */
@@ -2144,7 +2437,7 @@ const FAQ = [
   { keys:['exchange rate','rate kes','why 135','kes 135','129','130','rate today','forex','currency rate'],
     a:`💱 The exchange rate used for estimates is <strong>KES 135 per USD</strong>.<br><br>This reflects the rate applied by our banking partner, which may differ from the Central Bank of Kenya's official rate.<br><br>The final invoice will use the rate at the time of payment — if rates change significantly, we'll notify you before confirming your order.` },
   { keys:['contact','phone','whatsapp','reach','call','number'],
-    a:`📞 **Kenya WhatsApp:** +254 758 663 108<br>📞 **US Warehouse:** +1 657 215 7361<br><br>WhatsApp is fastest — we usually reply within minutes! 💬` },
+    a:`📞 **WhatsApp:** +254 758 663 108<br><br>WhatsApp is fastest — we usually reply within minutes! 💬` },
   { keys:['pay','payment','mpesa','m-pesa','till','how to pay','till number','lipa','buy goods'],
     a:`💳 <strong>Payment via M-Pesa Till Number:</strong><br><br>1️⃣ Go to M-Pesa → Lipa na M-Pesa<br>2️⃣ Select <strong>Buy Goods & Services</strong><br>3️⃣ Enter Till Number: <strong>6798004</strong><br>4️⃣ Enter your KES amount<br>5️⃣ Enter M-Pesa PIN & confirm<br>6️⃣ Send the M-Pesa SMS to WhatsApp: <strong>+254 758 663 108</strong><br><br>⚠️ Please pay immediately after receiving your invoice.` },
   { keys:['customs','customs clearance','duty','tax','import','kra'], a:`🛃 We handle customs clearance for you!<br><br>• <strong>$5 customs clearance fee per package</strong><br>• 1 package = $5 · 2 packages = $10 · 3 packages = $15<br>• Items that are consolidated ship as one package = $5 total<br><br>You don't need to deal with KRA — MRAN handles it all.` },
