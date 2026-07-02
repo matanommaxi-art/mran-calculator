@@ -4,14 +4,14 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>MRAN Logistics – Air Freight &amp; Ocean Shipping</title>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-SBYTH7BNPZ"></script>
+<!-- Google Analytics — replace G-XXXXXXXXXX with your Measurement ID -->
+<!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-SBYTH7BNPZ');
-</script>
+  gtag('config', 'G-XXXXXXXXXX');
+</script> -->
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════
@@ -787,6 +787,60 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
   .testi-grid { grid-template-columns: 1fr; }
   .testi-heading { font-size: 22px; }
 }
+
+
+/* ── DELIVERY POPUP ── */
+.delivery-popup-overlay {
+  position: fixed; inset: 0;
+  background: rgba(13,31,60,0.7);
+  z-index: 800; opacity: 0; pointer-events: none;
+  transition: opacity 0.25s;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+}
+.delivery-popup-overlay.open { opacity: 1; pointer-events: all; }
+.delivery-popup-card {
+  background: var(--card); border-radius: var(--r);
+  width: 100%; max-width: 420px;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(16px) scale(0.97);
+  transition: transform 0.25s cubic-bezier(0.16,1,0.3,1);
+  overflow: hidden;
+}
+.delivery-popup-overlay.open .delivery-popup-card { transform: translateY(0) scale(1); }
+.delivery-popup-hdr {
+  background: var(--navy); padding: 16px 20px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 2px solid var(--orange);
+}
+.delivery-popup-title {
+  font-family: var(--ffc); font-size: 15px; font-weight: 700;
+  color: #fff; letter-spacing: 0.05em; flex: 1;
+}
+.delivery-popup-close {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,255,255,0.1); border: none;
+  color: rgba(255,255,255,0.6); font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+}
+.delivery-popup-body { padding: 20px; }
+.delivery-popup-body .field { margin-bottom: 14px; }
+.delivery-popup-save {
+  width: 100%; padding: 13px;
+  background: var(--orange); color: #fff; border: none;
+  border-radius: var(--r-sm); font-family: var(--ffc);
+  font-size: 16px; font-weight: 700; letter-spacing: 0.05em;
+  cursor: pointer; transition: background 0.18s; margin-top: 6px;
+}
+.delivery-popup-save:hover { background: var(--orange2); }
+.delivery-address-display {
+  margin-top: 10px; padding: 10px 12px;
+  background: var(--green-dim); border: 1px solid rgba(22,163,74,0.25);
+  border-radius: var(--r-sm); font-size: 12px; color: var(--green);
+  display: none;
+}
+.delivery-address-display.show { display: block; }
 
 /* footer */
 .footer{background:var(--navy);margin-top:0;padding:20px 24px;text-align:center;border-top:3px solid var(--orange);}
@@ -1617,7 +1671,15 @@ function sendToMRAN() {
   msg += `💵 Total USD: ${usd}\n`;
   msg += `💰 *Total KES: ${kes}*\n\n`;
   msg += `━━━━━━━━━━━━━━━━━━\n`;
-  msg += `Please confirm and send me an invoice. Thank you! 🙏`;
+  if (window._deliveryAddress) {
+    const da = window._deliveryAddress;
+    msg += `\n🏠 *Delivery Address:*\n`;
+    msg += `Estate/Area: ${da.estate}\n`;
+    if (da.street) msg += `Street/Building: ${da.street}\n`;
+    msg += `Delivery Phone: ${da.phone}\n`;
+    if (da.notes) msg += `Notes: ${da.notes}\n`;
+  }
+  msg += `\nPlease confirm and send me an invoice. Thank you! 🙏`;
 
   window.open(`https://wa.me/254758663108?text=${encodeURIComponent(msg)}`, '_blank');
 }
@@ -1727,7 +1789,51 @@ function printQuote() {
     </div>
   </div>
   <script>window.onload=function(){window.print();}<\/script>
-  </body></html>`;
+  
+<!-- DELIVERY ADDRESS POPUP -->
+<div class="delivery-popup-overlay" id="deliveryPopup">
+  <div class="delivery-popup-card">
+    <div class="delivery-popup-hdr">
+      <div style="font-size:1.4rem;">🏠</div>
+      <div class="delivery-popup-title">Home Delivery Details</div>
+      <button class="delivery-popup-close" onclick="closeDeliveryPopup()">×</button>
+    </div>
+    <div class="delivery-popup-body">
+      <p style="font-size:13px;color:var(--text3);margin-bottom:16px;line-height:1.6;">
+        Please enter your delivery address so we can arrange door-to-door delivery within Nairobi.
+      </p>
+      <div class="field">
+        <div class="field-label">Estate / Area</div>
+        <div class="input-shell">
+          <input type="text" id="delEstate" placeholder="e.g. Westlands, Kilimani, Kasarani"/>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Street / Building / House No.</div>
+        <div class="input-shell">
+          <input type="text" id="delStreet" placeholder="e.g. Westview Apts, House 14B"/>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Delivery Phone Number</div>
+        <div class="input-shell">
+          <input type="tel" id="delPhone" placeholder="e.g. 0712 345 678"/>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Additional Instructions <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--muted);">(optional)</span></div>
+        <div class="input-shell">
+          <input type="text" id="delNotes" placeholder="e.g. Call when nearby, gate code 1234"/>
+        </div>
+      </div>
+      <button class="delivery-popup-save" onclick="saveDeliveryAddress()">
+        ✅ Save Delivery Address
+      </button>
+    </div>
+  </div>
+</div>
+
+</body></html>`;
 
   let iframe = document.getElementById('printFrame');
   if (!iframe) {
@@ -1884,6 +1990,59 @@ function toggleDel() {
   const cb = document.getElementById('homeDelivery');
   cb.checked = !cb.checked;
   document.getElementById('delCard').classList.toggle('on', cb.checked);
+  if (cb.checked) {
+    openDeliveryPopup();
+  } else {
+    // Clear saved address display
+    document.getElementById('deliveryAddrDisplay') && 
+      (document.getElementById('deliveryAddrDisplay').classList.remove('show'));
+    window._deliveryAddress = null;
+  }
+}
+
+function openDeliveryPopup() {
+  document.getElementById('deliveryPopup').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('delEstate').focus(), 300);
+}
+
+function closeDeliveryPopup() {
+  document.getElementById('deliveryPopup').classList.remove('open');
+  document.body.style.overflow = '';
+  // If they close without saving, turn off delivery toggle
+  if (!window._deliveryAddress) {
+    const cb = document.getElementById('homeDelivery');
+    cb.checked = false;
+    document.getElementById('delCard').classList.remove('on');
+  }
+}
+
+function saveDeliveryAddress() {
+  const estate = document.getElementById('delEstate').value.trim();
+  const street = document.getElementById('delStreet').value.trim();
+  const phone  = document.getElementById('delPhone').value.trim();
+  const notes  = document.getElementById('delNotes').value.trim();
+
+  if (!estate || !phone) {
+    alert('Please enter at least the estate/area and phone number.');
+    return;
+  }
+
+  window._deliveryAddress = { estate, street, phone, notes };
+
+  // Show saved address on the delivery toggle card
+  let display = document.getElementById('deliveryAddrDisplay');
+  if (!display) {
+    display = document.createElement('div');
+    display.id = 'deliveryAddrDisplay';
+    display.className = 'delivery-address-display';
+    document.getElementById('delCard').after(display);
+  }
+  display.innerHTML = `📍 <strong>${estate}${street ? ', ' + street : ''}</strong> · 📞 ${phone}${notes ? ' · ' + notes : ''}`;
+  display.classList.add('show');
+
+  document.getElementById('deliveryPopup').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 function scrollToAddrGate() {
@@ -2036,7 +2195,7 @@ function copyAddr() {
   });
 }
 
-function fmt(n) {
+function fmtKES(n) {
   return n.toLocaleString('en-KE', { minimumFractionDigits:0, maximumFractionDigits:0 });
 }
 
@@ -2045,144 +2204,134 @@ function calculate() {
   const errTxt = document.getElementById('errTxt');
   const resultsWrap = document.getElementById('resultsWrap');
   const rows = document.querySelectorAll('.pkg-row');
+
   if (!rows.length) {
     errTxt.textContent = 'Please add at least one item.';
-    errBox.classList.add('show'); resultsWrap.classList.remove('show'); return;
+    errBox.classList.add('show');
+    resultsWrap.classList.remove('show');
+    return;
   }
+
   const pkgs = [];
   for (const row of rows) {
     const rid = row.id.replace('pkg-','');
-    const L = parseFloat(document.getElementById('l-'+rid)?.value)||0;
-    const W = parseFloat(document.getElementById('w-'+rid)?.value)||0;
-    const H = parseFloat(document.getElementById('h-'+rid)?.value)||0;
-    const wt = parseFloat(document.getElementById('wt-'+rid)?.value)||0;
-    const tk = document.getElementById('trk-'+rid)?.value.trim()||'';
-    const iname = document.getElementById('iname-'+rid)?.value.trim()||'';
-    const store = document.getElementById('store-'+rid)?.value.trim()||'';
-    const desc = document.getElementById('desc-'+rid)?.value.trim()||'';
-    if (!L||!W||!H||!wt||L<=0||W<=0||H<=0||wt<=0) {
-      errTxt.textContent = `Please complete all fields for Item ${rid}.`;
-      errBox.classList.add('show'); resultsWrap.classList.remove('show'); return;
+    const L  = parseFloat(document.getElementById('l-'+rid)?.value)  || 0;
+    const W  = parseFloat(document.getElementById('w-'+rid)?.value)  || 0;
+    const H  = parseFloat(document.getElementById('h-'+rid)?.value)  || 0;
+    const wt = parseFloat(document.getElementById('wt-'+rid)?.value) || 0;
+    const tk    = document.getElementById('trk-'+rid)?.value.trim()   || '';
+    const iname = document.getElementById('iname-'+rid)?.value.trim() || '';
+    const store = document.getElementById('store-'+rid)?.value.trim() || '';
+    const desc  = document.getElementById('desc-'+rid)?.value.trim()  || '';
+    if (!L || !W || !H || !wt || L<=0 || W<=0 || H<=0 || wt<=0) {
+      errTxt.textContent = 'Please complete all fields for Item ' + rid + '.';
+      errBox.classList.add('show');
+      resultsWrap.classList.remove('show');
+      return;
     }
-    pkgs.push({rid,L,W,H,wt,tk,iname,store,desc});
+    pkgs.push({rid, L, W, H, wt, tk, iname, store, desc});
   }
+
   errBox.classList.remove('show');
-  const RATE=15,MIN=15,CUSTOMS=5,RATE_KES=135;
-  let totalFreight=0;
-  let totalCustoms=0;
+
+  const RATE = 15, MIN = 15, CUSTOMS = 5, RATE_KES = 135;
+  let totalFreight = 0;
+  let totalCustoms = 0;
+
   const calcs = pkgs.map(p => {
-    const vol=(p.L*p.W*p.H)/366;
-    const chg=Math.max(p.wt,vol);
-    // Per item rate — minimum $15 per item
-    const freightPerItem = Math.max(chg * RATE, MIN);
-    totalFreight+=freightPerItem;
-    totalCustoms+=CUSTOMS;
-    return{...p,vol,chg,freight:freightPerItem};
+    const vol = (p.L * p.W * p.H) / 366;
+    const chg = Math.max(p.wt, vol);
+    const freight = Math.max(chg * RATE, MIN);
+    totalFreight += freight;
+    totalCustoms += CUSTOMS;
+    return {...p, vol, chg, freight};
   });
-  const totalUsd=totalFreight+totalCustoms;
-  const hasDeliv=document.getElementById('homeDelivery').checked;
-  const totalKes=totalUsd*RATE_KES+(hasDeliv?450:0);
-  const pkgEl=document.getElementById('pkgResultsEl');
-  pkgEl.innerHTML='';
-  calcs.forEach(p=>{
-    const d=document.createElement('div');
-    d.className='pkg-result-card';
-    const pkgTitle = `Item ${p.rid}${p.iname ? ' — '+p.iname : ''}${p.tk ? ' &nbsp;·&nbsp; '+p.tk : ''}`;
-    const pkgMeta = [
-      p.store ? `🏪 ${p.store}` : '',
-      p.desc ? `📝 ${p.desc}` : '',
-    ].filter(Boolean).join(' &nbsp;·&nbsp; ');
-    d.innerHTML=`
-      <div class="pkg-result-label">${pkgTitle}</div>
-      ${pkgMeta ? `<div style="font-size:11px;color:var(--text3);margin-bottom:8px;">${pkgMeta}</div>` : ''}
-      <div class="pkg-result-grid">
-        <div class="prg-item"><div class="prg-l">Vol. Weight</div><div class="prg-v">${p.vol.toFixed(2)} kg</div></div>
-        <div class="prg-item"><div class="prg-l">Chargeable</div><div class="prg-v hl">${p.chg.toFixed(2)} kg</div></div>
-        <div class="prg-item"><div class="prg-l">Freight</div><div class="prg-v">$${p.freight.toFixed(2)}</div></div>
-      </div>
-    `;
+
+  const hasDeliv = document.getElementById('homeDelivery').checked;
+  const totalUsd = totalFreight + totalCustoms;
+  const totalKes = totalUsd * RATE_KES + (hasDeliv ? 450 : 0);
+
+  // Render per-item results
+  const pkgEl = document.getElementById('pkgResultsEl');
+  pkgEl.innerHTML = '';
+  calcs.forEach(p => {
+    const d = document.createElement('div');
+    d.className = 'pkg-result-card';
+    const pkgTitle = 'Item ' + p.rid + (p.iname ? ' — ' + p.iname : '') + (p.tk ? ' &nbsp;·&nbsp; ' + p.tk : '');
+    const pkgMeta  = [p.store ? '🏪 ' + p.store : '', p.desc ? '📝 ' + p.desc : ''].filter(Boolean).join(' &nbsp;·&nbsp; ');
+    d.innerHTML = '<div class="pkg-result-label">' + pkgTitle + '</div>' +
+      (pkgMeta ? '<div style="font-size:11px;color:var(--text3);margin-bottom:8px;">' + pkgMeta + '</div>' : '') +
+      '<div class="pkg-result-grid">' +
+        '<div class="prg-item"><div class="prg-l">Vol. Weight</div><div class="prg-v">'  + p.vol.toFixed(2)     + ' kg</div></div>' +
+        '<div class="prg-item"><div class="prg-l">Chargeable</div><div class="prg-v hl">' + p.chg.toFixed(2)   + ' kg</div></div>' +
+        '<div class="prg-item"><div class="prg-l">Freight</div><div class="prg-v">$'      + p.freight.toFixed(2) + '</div></div>' +
+      '</div>';
     pkgEl.appendChild(d);
   });
-  const client=document.getElementById('clientName').value.trim();
-  document.getElementById('resultsTitle').textContent=client?`Quote for ${client}`:'Cost Breakdown';
-  document.getElementById('r-customs').textContent = pkgs.length > 1 ? `$${totalCustoms.toFixed(2)} (${pkgs.length} × $5.00)` : '$5.00';
-  document.getElementById('r-del').textContent=hasDeliv?'KES 450':'Not included';
-  document.getElementById('r-usd').textContent='$'+totalUsd.toFixed(2);
-  document.getElementById('r-kes').textContent='KES '+fmt(totalKes);
+
+  // Summary rows
+  const client = document.getElementById('clientName').value.trim();
+  document.getElementById('resultsTitle').textContent = client ? 'Quote for ' + client : 'Cost Breakdown';
+  document.getElementById('r-customs').textContent = pkgs.length > 1
+    ? '$' + totalCustoms.toFixed(2) + ' (' + pkgs.length + ' × $5.00)'
+    : '$5.00';
+  document.getElementById('r-del').textContent  = hasDeliv ? 'KES 450' : 'Not included';
+  document.getElementById('r-usd').textContent  = '$' + totalUsd.toFixed(2);
+  document.getElementById('r-kes').textContent  = 'KES ' + fmtKES(totalKes);
+
   lastTotalUsd = totalUsd;
   lastTotalKes = totalKes;
   setCurrency(activeCurrency);
   resultsWrap.classList.add('show');
-  // ── ESTIMATED ARRIVAL DATE ──
-  const today = new Date();
-  const todayDay = today.getDay(); // 0=Sun,1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat
 
-  // Find next dispatch Wednesday
+  // Estimated arrival
+  const today    = new Date();
+  const todayDay = today.getDay();
   let daysToWed;
-  if (todayDay === 0 || todayDay === 6) {
-    // Weekend — treat as Monday arrival, dispatch that Wednesday
-    daysToWed = todayDay === 0 ? 3 : 4; // Sun→3days, Sat→4days to Mon then Wed
-  } else if (todayDay === 1) { // Monday
-    daysToWed = 2;
-  } else if (todayDay === 2) { // Tuesday
-    daysToWed = 1;
-  } else { // Wed/Thu/Fri → next Wednesday
-    daysToWed = (3 - todayDay + 7) % 7 || 7;
-  }
+  if (todayDay === 0) daysToWed = 3;
+  else if (todayDay === 1) daysToWed = 2;
+  else if (todayDay === 2) daysToWed = 1;
+  else if (todayDay === 6) daysToWed = 4;
+  else daysToWed = (3 - todayDay + 7) % 7 || 7;
 
   const dispatchDate = new Date(today);
   dispatchDate.setDate(today.getDate() + daysToWed);
 
-  // Add 7 and 15 business days from dispatch (skip weekends)
-  function addBusinessDays(startDate, days) {
+  function addBizDays(startDate, days) {
     const result = new Date(startDate);
     let added = 0;
     while (added < days) {
       result.setDate(result.getDate() + 1);
       const d = result.getDay();
-      if (d !== 0 && d !== 6) added++; // Skip Sat & Sun
+      if (d !== 0 && d !== 6) added++;
     }
     return result;
   }
 
-  const earlyDate = addBusinessDays(dispatchDate, 7);
-  const lateDate  = addBusinessDays(dispatchDate, 15);
+  const earlyDate = addBizDays(dispatchDate, 7);
+  const lateDate  = addBizDays(dispatchDate, 15);
 
-  const fmt = d => d.toLocaleDateString('en-KE', { day: 'numeric', month: 'short', year: 'numeric' });
-  const fmtShort = d => d.toLocaleDateString('en-KE', { day: 'numeric', month: 'short' });
+  function fmtD(d) { return d.toLocaleDateString('en-KE', {day:'numeric', month:'short', year:'numeric'}); }
+  function fmtS(d) { return d.toLocaleDateString('en-KE', {day:'numeric', month:'short'}); }
 
-  // Show estimated arrival below results
-  const existingETA = document.getElementById('etaBanner');
-  if (existingETA) existingETA.remove();
+  const existing = document.getElementById('etaBanner');
+  if (existing) existing.remove();
 
-  const etaDiv = document.createElement('div');
-  etaDiv.id = 'etaBanner';
-  etaDiv.style.cssText = `
-    margin-top:12px; padding:14px 16px;
-    background:linear-gradient(135deg,rgba(13,31,60,0.8),rgba(26,47,80,0.8));
-    border:1px solid var(--navy-light); border-left:3px solid var(--orange);
-    border-radius:var(--r-sm); font-size:13px; line-height:1.8;
-  `;
-  etaDiv.innerHTML = `
-    <div style="font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange);margin-bottom:6px;">📅 Estimated Delivery Window</div>
-    <div style="color:var(--text);">
-      ✈️ <strong>Dispatch:</strong> <span style="color:#fff;">Wed, ${fmt(dispatchDate)}</span>
-      ${todayDay === 3 ? `<span style="font-size:10px;color:var(--muted);"> (Wed arrivals not guaranteed same week)</span>` : ''}
-    </div>
-    <div style="color:var(--text);margin-top:4px;">
-      🇰🇪 <strong>Estimated Arrival:</strong> <span style="color:var(--orange2);font-weight:700;">${fmtShort(earlyDate)} – ${fmt(lateDate)}</span>
-    </div>
-    <div style="font-size:11px;color:var(--muted);margin-top:6px;">
-      ⏱️ 7–15 business days from dispatch · Weekends excluded · Subject to customs clearance
-    </div>
-  `;
+  const eta = document.createElement('div');
+  eta.id = 'etaBanner';
+  eta.style.cssText = 'margin-top:12px;padding:14px 16px;background:linear-gradient(135deg,rgba(13,31,60,0.8),rgba(26,47,80,0.8));border:1px solid rgba(255,255,255,0.08);border-left:3px solid var(--orange);border-radius:var(--r-sm);font-size:13px;line-height:1.8;';
+  eta.innerHTML =
+    '<div style="font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange);margin-bottom:6px;">📅 Estimated Delivery Window</div>' +
+    '<div style="color:var(--text);">✈️ <strong>Dispatch:</strong> <span style="color:#fff;">Wed, ' + fmtD(dispatchDate) + '</span>' +
+    (todayDay === 3 ? ' <span style="font-size:10px;color:var(--muted);">(Wed arrivals not guaranteed same week)</span>' : '') + '</div>' +
+    '<div style="color:var(--text);margin-top:4px;">🇰🇪 <strong>Estimated Arrival:</strong> <span style="color:var(--orange2);font-weight:700;">' + fmtS(earlyDate) + ' – ' + fmtD(lateDate) + '</span></div>' +
+    '<div style="font-size:11px;color:var(--muted);margin-top:6px;">⏱️ 7–15 business days from dispatch · Weekends excluded · Subject to customs clearance</div>';
 
-  const resultsWrapEl = document.getElementById('resultsWrap');
-  resultsWrapEl.appendChild(etaDiv);
+  resultsWrap.appendChild(eta);
 
-  document.getElementById('consolBanner').style.display='block';
-  document.getElementById('referralBanner').style.display='block';
-  setTimeout(()=>resultsWrap.scrollIntoView({behavior:'smooth',block:'nearest'}),60);
+  document.getElementById('consolBanner').style.display = 'block';
+  document.getElementById('referralBanner').style.display = 'block';
+  setTimeout(() => resultsWrap.scrollIntoView({behavior:'smooth', block:'nearest'}), 60);
 }
 
 /* ── OCEAN CALCULATOR ── */
@@ -2480,8 +2629,8 @@ function addMsg(html, role) {
   const d = document.createElement('div');
   d.className = `msg ${role}`;
   // bold markdown
-  const fmt = html.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
-  d.innerHTML = `<div class="msg-bubble">${fmt}</div><div class="msg-time">${nowTime()}</div>`;
+  const fmtBold = html.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>');
+  d.innerHTML = `<div class="msg-bubble">${fmtBold}</div><div class="msg-time">${nowTime()}</div>`;
   msgs.appendChild(d);
   msgs.scrollTop = msgs.scrollHeight;
 }
@@ -2529,5 +2678,49 @@ function toggleChat() {
   if (chatOpen) setTimeout(()=>document.getElementById('chatInput').focus(),350);
 }
 </script>
+
+<!-- DELIVERY ADDRESS POPUP -->
+<div class="delivery-popup-overlay" id="deliveryPopup">
+  <div class="delivery-popup-card">
+    <div class="delivery-popup-hdr">
+      <div style="font-size:1.4rem;">🏠</div>
+      <div class="delivery-popup-title">Home Delivery Details</div>
+      <button class="delivery-popup-close" onclick="closeDeliveryPopup()">×</button>
+    </div>
+    <div class="delivery-popup-body">
+      <p style="font-size:13px;color:var(--text3);margin-bottom:16px;line-height:1.6;">
+        Please enter your delivery address so we can arrange door-to-door delivery within Nairobi.
+      </p>
+      <div class="field">
+        <div class="field-label">Estate / Area</div>
+        <div class="input-shell">
+          <input type="text" id="delEstate" placeholder="e.g. Westlands, Kilimani, Kasarani"/>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Street / Building / House No.</div>
+        <div class="input-shell">
+          <input type="text" id="delStreet" placeholder="e.g. Westview Apts, House 14B"/>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Delivery Phone Number</div>
+        <div class="input-shell">
+          <input type="tel" id="delPhone" placeholder="e.g. 0712 345 678"/>
+        </div>
+      </div>
+      <div class="field">
+        <div class="field-label">Additional Instructions <span style="font-weight:400;text-transform:none;font-size:10px;color:var(--muted);">(optional)</span></div>
+        <div class="input-shell">
+          <input type="text" id="delNotes" placeholder="e.g. Call when nearby, gate code 1234"/>
+        </div>
+      </div>
+      <button class="delivery-popup-save" onclick="saveDeliveryAddress()">
+        ✅ Save Delivery Address
+      </button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
