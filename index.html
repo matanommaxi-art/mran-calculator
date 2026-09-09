@@ -971,11 +971,11 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
       <div class="step"><div class="step-num">1</div><div><div class="step-title">Convert Weight to Kilograms</div><div class="step-desc">Actual weight must be in kilograms. If your weight is in pounds, divide by 2.20462 to convert.</div><div class="step-formula">kg = lbs ÷ 2.20462</div></div></div>
       <div class="step"><div class="step-num">2</div><div><div class="step-title">Calculate Volumetric Weight</div><div class="step-desc">Volumetric weight accounts for the size of your package. Enter dimensions in inches.</div><div class="step-formula">Volumetric Weight (kg) = (L × W × H in inches) ÷ 366</div></div></div>
       <div class="step"><div class="step-num">3</div><div><div class="step-title">Chargeable Weight</div><div class="step-desc">The chargeable weight is the higher of the actual weight or volumetric weight. Airlines always bill on the greater of the two.</div><div class="step-formula">Chargeable Weight = MAX(actual weight, volumetric weight)</div></div></div>
-      <div class="step"><div class="step-num">4</div><div><div class="step-title">Air Cost Calculation</div><div class="step-desc">Our air freight to Kenya rate is <strong>$18/KG</strong> based on the actual or volumetric weight — whichever is higher. The <strong>minimum charge applies</strong>. A <strong>$5 customs clearance fee of $5/kg applies</strong> — so 3 packages = $15 customs. Consolidatable items shipped together count as one package.</div><div class="step-formula">Air Cost = (Chargeable Weight × $18) + ($5 × number of packages)</div></div></div>
+      <div class="step"><div class="step-num">4</div><div><div class="step-title">Air Cost Calculation</div><div class="step-desc">Our air freight to Kenya rate is <strong>$18/KG</strong> based on the actual or volumetric weight — whichever is higher. The <strong>minimum charge: $25</strong>. Customs clearance is <strong>$5/kg</strong> based on chargeable weight. Verify &amp; Consolidate is a flat <strong>$7/shipment</strong>.</div><div class="step-formula">Air Cost = (Chargeable Weight × $18) + ($5 × number of packages)</div></div></div>
     </div>
     <div class="rate-banner">
       <div class="rb-item"><div class="rb-label">Air Freight Rate</div><div class="rb-val">$18 / kg</div></div>
-      <div class="rb-item"><div class="rb-label">Minimum Charge</div><div class="rb-val">$15.00</div></div>
+      <div class="rb-item"><div class="rb-label">Minimum Charge</div><div class="rb-val">$25.00</div></div>
       <div class="rb-item"><div class="rb-label">Customs Clearance</div><div class="rb-val">$5 / kg</div></div>
       <div class="rb-item"><div class="rb-label">Verify &amp; Consolidate</div><div class="rb-val">$7 / shipment</div></div>
       <div class="rb-item"><div class="rb-label">Shipment Protection</div><div class="rb-val">5% (min $5)</div></div>
@@ -1580,7 +1580,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
         <button class="faq-q" onclick="toggleFAQ(this)">
           What is the air freight rate? <span class="faq-icon">+</span>
         </button>
-        <div class="faq-a">Our air freight rate is <strong>$18 per kg</strong> based on actual or volumetric weight — whichever is higher. Minimum charge: see calculator. A <strong>$5 customs clearance fee</strong> applies per package. Exchange rate used: KES 135 per USD.</div>
+        <div class="faq-a">Our air freight rate is <strong>$18 per kg</strong> based on actual or volumetric weight — whichever is higher. Minimum charge: $25. A <strong>$5 customs clearance fee</strong> applies per package. Exchange rate used: KES 135 per USD.</div>
       </div>
 
       <div class="faq-item">
@@ -2715,7 +2715,7 @@ setCurrency('KES');
 
 <script>
 const FAQ = [
-  { keys:['air freight rate','rate per kg','how much per kg','price per kg','cost per kg','air cost','air price','air rate','$15'], a:`Our air freight rate is **$18 per kg** — based on whichever is higher between actual weight and volumetric weight.<br><br>📦 Volumetric weight = (L × W × H in inches) ÷ 366<br>💵 Minimum charge: see calculator<br>🛃 Customs clearance: +$5 per shipment<br>💱 Exchange rate: KES 135 per USD` },
+  { keys:['air freight rate','rate per kg','how much per kg','price per kg','cost per kg','air cost','air price','air rate','$18'], a:`Our air freight rate is **$18 per kg** — based on whichever is higher between actual weight and volumetric weight.<br><br>📦 Volumetric weight = (L × W × H in inches) ÷ 366<br>💵 Minimum charge: $25<br>🛃 Customs clearance: +$5 per shipment<br>💱 Exchange rate: KES 135 per USD` },
   { keys:['address','us address','warehouse','ship to','huntington','shipping address','where to ship','where do i ship'], a:`📍 To get your personal US shipping address, scroll up to the <strong>"Get Your US Shipping Address"</strong> section.<br><br>Simply enter your <strong>full name + WhatsApp number</strong> and click <strong>"Get My Shipping Address"</strong> — your address will be revealed instantly with your name pre-filled! 🔓` },
   { keys:['how long','delivery time','transit time','days','weeks','how many days','shipping time','when will','air freight time'], a:`✈️ Air freight typically takes **7–14 days** after we receive your package at our US warehouse.<br><br>🚢 Ocean shipping takes **75–120 days** — but is much cheaper for heavy or bulky items.` },
   { keys:['ocean','sea freight','ocean shipping','ocean rate','sea shipping','container','barrel','tv shipping','how much for tv'], a:`🚢 Ocean shipping is priced at **$33 per cubic foot** — all-inclusive with customs.<br><br>Popular items:<br>• 55" TV → $225<br>• 65" TV → $285<br>• 75" TV → $435<br>• 85" TV → $650<br>• 55 Gallon Barrel → $330<br><br>Minimum charge: $135 · Delivery: 75–120 days` },
