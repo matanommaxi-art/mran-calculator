@@ -904,7 +904,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
   <div class="hero-sub">Air freight for fast deliveries. Ocean shipping for heavy, bulky items. Choose your service below.</div>
   <div class="hero-pills">
     <div class="hpill"><div class="hpill-dot g"></div>Live Rates</div>
-    <div class="hpill"><div class="hpill-dot o"></div>✈️ Air $15/kg</div>
+    <div class="hpill"><div class="hpill-dot o"></div>✈️ Air $18/kg</div>
     <div class="hpill"><div class="hpill-dot b"></div>🚢 Ocean $33/ft³</div>
   </div>
 </div>
@@ -971,12 +971,14 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
       <div class="step"><div class="step-num">1</div><div><div class="step-title">Convert Weight to Kilograms</div><div class="step-desc">Actual weight must be in kilograms. If your weight is in pounds, divide by 2.20462 to convert.</div><div class="step-formula">kg = lbs ÷ 2.20462</div></div></div>
       <div class="step"><div class="step-num">2</div><div><div class="step-title">Calculate Volumetric Weight</div><div class="step-desc">Volumetric weight accounts for the size of your package. Enter dimensions in inches.</div><div class="step-formula">Volumetric Weight (kg) = (L × W × H in inches) ÷ 366</div></div></div>
       <div class="step"><div class="step-num">3</div><div><div class="step-title">Chargeable Weight</div><div class="step-desc">The chargeable weight is the higher of the actual weight or volumetric weight. Airlines always bill on the greater of the two.</div><div class="step-formula">Chargeable Weight = MAX(actual weight, volumetric weight)</div></div></div>
-      <div class="step"><div class="step-num">4</div><div><div class="step-title">Air Cost Calculation</div><div class="step-desc">Our air freight to Kenya rate is <strong>$15/KG</strong> based on the actual or volumetric weight — whichever is higher. The <strong>minimum charge is $15</strong>. A <strong>$5 customs clearance fee applies per package</strong> — so 3 packages = $15 customs. Consolidatable items shipped together count as one package.</div><div class="step-formula">Air Cost = (Chargeable Weight × $15) + ($5 × number of packages)</div></div></div>
+      <div class="step"><div class="step-num">4</div><div><div class="step-title">Air Cost Calculation</div><div class="step-desc">Our air freight to Kenya rate is <strong>$18/KG</strong> based on the actual or volumetric weight — whichever is higher. The <strong>minimum charge applies</strong>. A <strong>$5 customs clearance fee of $5/kg applies</strong> — so 3 packages = $15 customs. Consolidatable items shipped together count as one package.</div><div class="step-formula">Air Cost = (Chargeable Weight × $18) + ($5 × number of packages)</div></div></div>
     </div>
     <div class="rate-banner">
-      <div class="rb-item"><div class="rb-label">Air Freight Rate</div><div class="rb-val">$15 / kg</div></div>
+      <div class="rb-item"><div class="rb-label">Air Freight Rate</div><div class="rb-val">$18 / kg</div></div>
       <div class="rb-item"><div class="rb-label">Minimum Charge</div><div class="rb-val">$15.00</div></div>
-      <div class="rb-item"><div class="rb-label">Customs / Package</div><div class="rb-val">$5.00</div></div>
+      <div class="rb-item"><div class="rb-label">Customs Clearance</div><div class="rb-val">$5 / kg</div></div>
+      <div class="rb-item"><div class="rb-label">Verify &amp; Consolidate</div><div class="rb-val">$7 / shipment</div></div>
+      <div class="rb-item"><div class="rb-label">Shipment Protection</div><div class="rb-val">5% (min $5)</div></div>
       <div class="rb-item" style="position:relative;">
         <div class="rb-label" style="display:flex;align-items:center;gap:5px;">
           Exchange Rate
@@ -1039,6 +1041,13 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
       <div class="field-label">Client Name</div>
       <div class="input-shell"><input type="text" id="clientName" placeholder="Enter your full name" oninput="syncName()"/></div>
     </div>
+    <div class="field" style="margin-bottom:14px;">
+      <div class="field-label">Declared Shipment Value (USD) <span style="font-size:10px;font-weight:400;color:var(--muted);text-transform:none;letter-spacing:0;">— used for Shipment Protection</span></div>
+      <div class="input-shell">
+        <input type="number" id="declaredValue" placeholder="e.g. 500" min="0" step="1"/>
+        <span class="input-unit">USD</span>
+      </div>
+    </div>
 
     <!-- Currency Toggle -->
     <div class="currency-toggle-row">
@@ -1065,7 +1074,41 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
       <div class="tog"></div>
     </div>
     <input type="checkbox" id="homeDelivery"/>
-    <button class="calc-btn" onclick="calculate()">Calculate Shipping Cost</button>
+    
+    <!-- What's Included -->
+    <div style="background:var(--navy);border:1px solid var(--navy3);border-radius:var(--r-sm);padding:18px;margin-bottom:18px;">
+      <div style="font-family:var(--ffc);font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--orange);margin-bottom:14px;">💡 What's Included in My Price?</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div style="background:rgba(255,255,255,0.04);border-radius:var(--r-sm);padding:12px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange2);margin-bottom:4px;">✈️ Air Freight</div>
+          <div style="font-family:var(--mono);font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;">$18/kg</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5);line-height:1.5;">International air transport from USA to Kenya</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:var(--r-sm);padding:12px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange2);margin-bottom:4px;">🛃 Customs Clearance</div>
+          <div style="font-family:var(--mono);font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;">$5/kg</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5);line-height:1.5;">MRAN Logistics customs clearance service</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:var(--r-sm);padding:12px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange2);margin-bottom:4px;">📦 Verify &amp; Consolidate</div>
+          <div style="font-family:var(--mono);font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;">$7/shipment</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5);line-height:1.5;">Package verification &amp; consolidation per shipment</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border-radius:var(--r-sm);padding:12px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange2);margin-bottom:4px;">🛡️ Shipment Protection</div>
+          <div style="font-family:var(--mono);font-size:16px;font-weight:700;color:#fff;margin-bottom:4px;">5% / min $5</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5);line-height:1.5;">Mandatory financial safeguard on declared value</div>
+        </div>
+      </div>
+      <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:12px;font-size:12px;color:rgba(255,255,255,0.5);line-height:1.8;">
+        <span style="color:var(--orange2);font-weight:700;">$18/kg</span> Air Freight &nbsp;+&nbsp;
+        <span style="color:var(--orange2);font-weight:700;">$5/kg</span> Customs &nbsp;+&nbsp;
+        <span style="color:var(--orange2);font-weight:700;">$7</span> Verify &amp; Consolidate &nbsp;+&nbsp;
+        <span style="color:var(--orange2);font-weight:700;">5%</span> Protection &nbsp;=&nbsp;
+        <span style="color:#fff;font-weight:700;">Your Total</span>
+      </div>
+    </div>
+<button class="calc-btn" onclick="calculate()">Calculate Shipping Cost</button>
     <div class="err-box" id="errBox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="errTxt">Please fill in all required fields.</span></div>
 
     <!-- Results -->
@@ -1073,8 +1116,11 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
       <div class="results-hdr"><div class="results-hdr-title" id="resultsTitle">Cost Breakdown</div><div class="est-tag">ESTIMATE</div></div>
       <div class="results-body">
         <div class="pkg-results" id="pkgResultsEl"></div>
-        <div class="r-row"><div class="r-key"><div class="dot o"></div>Customs clearance</div><div class="r-val" id="r-customs">—</div></div>
-        <div class="r-row"><div class="r-key"><div class="dot g"></div>Home delivery</div><div class="r-val" id="r-del">—</div></div>
+        <div class="r-row"><div class="r-key"><div class="dot o"></div>✈️ Air Freight</div><div class="r-val" id="r-air">—</div></div>
+        <div class="r-row"><div class="r-key"><div class="dot o"></div>🛃 Customs Clearance</div><div class="r-val" id="r-customs">—</div></div>
+        <div class="r-row"><div class="r-key"><div class="dot o"></div>📦 Verify &amp; Consolidate</div><div class="r-val" id="r-verify">—</div></div>
+        <div class="r-row"><div class="r-key"><div class="dot o"></div>🛡️ Shipment Protection</div><div class="r-val" id="r-protect">—</div></div>
+        <div class="r-row"><div class="r-key"><div class="dot g"></div>🏠 Home Delivery</div><div class="r-val" id="r-del">—</div></div>
         <div class="total-block">
           <div class="total-usd" id="totalUsdRow"><div class="total-usd-label">Total (USD)</div><div class="total-usd-val" id="r-usd">—</div></div>
           <div class="total-kes" id="totalKesRow"><div class="total-kes-label"><span>Total Amount</span><span>Kenyan Shillings</span></div><div class="total-kes-val" id="r-kes">—</div></div>
@@ -1445,6 +1491,84 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
 </div><!-- /ocean-wrap -->
 </div><!-- /panel-ocean -->
 
+
+<!-- SHIPMENT PROTECTION SECTION -->
+<div style="background:var(--bg);padding:56px 24px;border-top:1px solid var(--line);">
+  <div style="max-width:760px;margin:0 auto;">
+    <div class="testi-kicker">Mandatory for all Shipping Only Orders</div>
+    <h2 class="testi-heading">🛡️ Shipment Protection</h2>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;">
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;border-left:3px solid var(--orange);">
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange);margin-bottom:8px;">Cost</div>
+        <div style="font-family:var(--ffc);font-size:24px;font-weight:800;color:var(--navy);">5% of declared value</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:4px;">Minimum charge: $5 per shipment</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;border-left:3px solid var(--navy);">
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--navy);margin-bottom:8px;">Example</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+          Declared value: <strong>$1,000</strong><br>
+          Protection: $1,000 × 5% = <strong>$50</strong><br><br>
+          Declared value: <strong>$50</strong><br>
+          $50 × 5% = $2.50 → min applies → <strong>$5</strong>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:14px;color:var(--text2);line-height:1.9;margin-bottom:24px;">
+      <p style="margin-bottom:14px;">At MRAN Logistics, we understand that the safety of your goods in transit is important. Our Shipment Protection Program provides an added financial safeguard for eligible goods against covered loss or damage, subject to the terms, exclusions, and limitations of the program.</p>
+      <p style="margin-bottom:14px;">Shipment Protection is a <strong>standard and mandatory requirement</strong> for all Shipping Only orders with MRAN Logistics. This ensures that every eligible shipment has an added financial safeguard rather than leaving protection as an optional service.</p>
+    </div>
+
+    <!-- Why Required -->
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;margin-bottom:16px;">
+      <div style="font-family:var(--ffc);font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;">Why Shipment Protection is Required</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+        International shipments move through multiple facilities, carriers, and handling points before reaching their destination. While MRAN Logistics takes reasonable steps to maintain the safety and integrity of shipments, unexpected events such as loss or damage can occur during transit.<br><br>
+        Making Shipment Protection standard on every Shipping Only order ensures that every customer has an added financial safeguard for eligible goods in the event of covered loss or damage.
+      </div>
+    </div>
+
+    <!-- Coverage Timeline -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;">
+        <div style="font-family:var(--ffc);font-size:14px;font-weight:700;color:var(--navy);margin-bottom:10px;">🟢 When Protection Begins</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7;">Protection applies to eligible goods after they have been <strong>inspected at our U.S. warehouse</strong> and during transportation to Kenya, subject to program terms.</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;">
+        <div style="font-family:var(--ffc);font-size:14px;font-weight:700;color:var(--navy);margin-bottom:10px;">🔴 When Protection Ends</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.7;">Protection ends upon <strong>collection from our Nairobi pick-up point</strong> or <strong>delivery by Fargo Courier Limited</strong>. Verify contents before leaving the pick-up point.</div>
+      </div>
+    </div>
+
+    <!-- Third Party -->
+    <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:var(--r);padding:20px;margin-bottom:16px;">
+      <div style="font-family:var(--ffc);font-size:14px;font-weight:700;color:#7a5300;margin-bottom:10px;">⚠️ Third-Party Collection</div>
+      <div style="font-size:13px;color:#7a5300;line-height:1.7;">If you arrange for a third party (friend, family member, rider, or independent courier) to collect your shipment from our Nairobi pick-up point, Shipment Protection <strong>ends once the shipment is handed over</strong> to that person. MRAN Logistics is not responsible for loss or damage reported after the authorized third party has taken possession.</div>
+    </div>
+
+    <!-- Exclusions -->
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;margin-bottom:16px;">
+      <div style="font-family:var(--ffc);font-size:15px;font-weight:700;color:var(--navy);margin-bottom:12px;">Coverage Limitations &amp; Exclusions</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+        <strong>Unlisted Items:</strong> Shipment Protection does not cover goods that are not listed on your MRAN Logistics order.<br><br>
+        To qualify for Shipment Protection, you must ensure that:<br>
+        • Every item is listed on your order<br>
+        • Item descriptions are accurate and complete<br>
+        • The declared shipment value is accurate<br><br>
+        Items not listed on the MRAN Logistics order are <strong>not eligible</strong> for a Shipment Protection claim.
+      </div>
+    </div>
+
+    <!-- Customer Responsibility -->
+    <div style="background:rgba(13,31,60,0.04);border:1px solid var(--line);border-left:3px solid var(--orange);border-radius:0 var(--r) var(--r) 0;padding:16px 20px;">
+      <div style="font-size:13px;color:var(--text2);line-height:1.8;">
+        💡 <strong>Shipment Protection charges are non-refundable and non-transferable.</strong> For Shipping Only orders, the charge is automatically included in your order total. Any claim for loss or damage should be reported <strong>immediately upon receipt</strong> of the goods.
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- FAQ SECTION -->
 <div class="faq-section">
   <div class="faq-inner">
@@ -1456,7 +1580,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
         <button class="faq-q" onclick="toggleFAQ(this)">
           What is the air freight rate? <span class="faq-icon">+</span>
         </button>
-        <div class="faq-a">Our air freight rate is <strong>$15 per kg</strong> based on actual or volumetric weight — whichever is higher. Minimum charge is $15. A <strong>$5 customs clearance fee</strong> applies per package. Exchange rate used: KES 135 per USD.</div>
+        <div class="faq-a">Our air freight rate is <strong>$18 per kg</strong> based on actual or volumetric weight — whichever is higher. Minimum charge: see calculator. A <strong>$5 customs clearance fee</strong> applies per package. Exchange rate used: KES 135 per USD.</div>
       </div>
 
       <div class="faq-item">
@@ -1498,7 +1622,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
         <button class="faq-q" onclick="toggleFAQ(this)">
           Do you offer consolidation? <span class="faq-icon">+</span>
         </button>
-        <div class="faq-a">Yes! We consolidate small non-hazardous items like hair & beauty products, clothing, skincare, supplements, books, toys, and home goods. Electronics (phones, laptops) are <strong>not consolidated</strong> — each item is shipped and billed separately. WhatsApp us to arrange: <strong>+254 758 663 108</strong></div>
+        <div class="faq-a">Yes! We consolidate small non-hazardous items like hair &amp; beauty products, clothing, skincare, supplements, books, toys, and home goods. Electronics (phones, laptops) are <strong>not consolidated</strong> — each item is billed separately.<br><br><strong>Verify &amp; Consolidate fee: $7 per shipment</strong> (flat fee — not per kg, not per package). WhatsApp us to arrange: <strong>+254 758 663 108</strong></div>
       </div>
 
       <div class="faq-item">
@@ -1570,7 +1694,7 @@ tbody tr:hover td{background:rgba(255,255,255,0.03);}
 <div class="footer">
   <div class="footer-brand">MRAN <span>LOGISTICS</span></div>
   <div class="footer-line">Air Freight &amp; Ocean Shipping — US to Kenya &nbsp;|&nbsp; <span class="footer-phone">+254 758 663 108</span></div>
-  <div class="footer-line" style="margin-top:4px;font-size:11px;">Rates effective 2025 · Estimates only — final charges may vary based on actual measurements at our warehouse.</div>
+  <div class="footer-line" style="margin-top:4px;font-size:11px;">Air freight rates effective July 7, 2026. Estimates are based on information provided by the customer. Final charges may vary based on actual warehouse measurements and declared shipment value.</div>
   <div id="bizBar" style="margin-top:10px;margin-right:120px;padding:8px 16px;border-radius:20px;border:1px solid rgba(255,255,255,0.08);font-family:var(--ff);font-size:12px;font-weight:500;color:#dce4ee;display:inline-block;transition:all 0.3s;line-height:1.8;">Loading hours...</div>
 </div>
 
@@ -1639,7 +1763,7 @@ function setCurrency(c) {
 
 function sendReferral() {
   const client = document.getElementById('clientName').value.trim();
-  const msg = `Hey! 👋 I've been using *MRAN Logistics* to ship items from the US to Kenya and it's been great!\n\n✈️ Fast air freight — 7–15 business days\n💰 Transparent pricing — $15/kg\n📦 They handle everything including customs\n\nCheck out their shipping calculator here:\n👉 https://matanommaxi-art.github.io/mran-calculator\n\nHighly recommend! 🇺🇸🇰🇪`;
+  const msg = `Hey! 👋 I've been using *MRAN Logistics* to ship items from the US to Kenya and it's been great!\n\n✈️ Fast air freight — 7–15 business days\n💰 Transparent pricing — $18/kg\n📦 They handle everything including customs\n\nCheck out their shipping calculator here:\n👉 https://matanommaxi-art.github.io/mran-calculator\n\nHighly recommend! 🇺🇸🇰🇪`;
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
@@ -2200,10 +2324,10 @@ function fmtKES(n) {
 }
 
 function calculate() {
-  const errBox = document.getElementById('errBox');
-  const errTxt = document.getElementById('errTxt');
+  const errBox     = document.getElementById('errBox');
+  const errTxt     = document.getElementById('errTxt');
   const resultsWrap = document.getElementById('resultsWrap');
-  const rows = document.querySelectorAll('.pkg-row');
+  const rows       = document.querySelectorAll('.pkg-row');
 
   if (!rows.length) {
     errTxt.textContent = 'Please add at least one item.';
@@ -2214,15 +2338,15 @@ function calculate() {
 
   const pkgs = [];
   for (const row of rows) {
-    const rid = row.id.replace('pkg-','');
-    const L  = parseFloat(document.getElementById('l-'+rid)?.value)  || 0;
-    const W  = parseFloat(document.getElementById('w-'+rid)?.value)  || 0;
-    const H  = parseFloat(document.getElementById('h-'+rid)?.value)  || 0;
-    const wt = parseFloat(document.getElementById('wt-'+rid)?.value) || 0;
-    const tk    = document.getElementById('trk-'+rid)?.value.trim()   || '';
-    const iname = document.getElementById('iname-'+rid)?.value.trim() || '';
-    const store = document.getElementById('store-'+rid)?.value.trim() || '';
-    const desc  = document.getElementById('desc-'+rid)?.value.trim()  || '';
+    const rid   = row.id.replace('pkg-','');
+    const L     = parseFloat(document.getElementById('l-'+rid)?.value)  || 0;
+    const W     = parseFloat(document.getElementById('w-'+rid)?.value)  || 0;
+    const H     = parseFloat(document.getElementById('h-'+rid)?.value)  || 0;
+    const wt    = parseFloat(document.getElementById('wt-'+rid)?.value) || 0;
+    const tk    = document.getElementById('trk-'+rid)?.value.trim()    || '';
+    const iname = document.getElementById('iname-'+rid)?.value.trim()  || '';
+    const store = document.getElementById('store-'+rid)?.value.trim()  || '';
+    const desc  = document.getElementById('desc-'+rid)?.value.trim()   || '';
     if (!L || !W || !H || !wt || L<=0 || W<=0 || H<=0 || wt<=0) {
       errTxt.textContent = 'Please complete all fields for Item ' + rid + '.';
       errBox.classList.add('show');
@@ -2232,26 +2356,46 @@ function calculate() {
     pkgs.push({rid, L, W, H, wt, tk, iname, store, desc});
   }
 
+  // Declared value for shipment protection
+  const declaredVal = parseFloat(document.getElementById('declaredValue')?.value) || 0;
+  if (declaredVal <= 0) {
+    errTxt.textContent = 'Please enter the declared shipment value (USD).';
+    errBox.classList.add('show');
+    resultsWrap.classList.remove('show');
+    return;
+  }
+
   errBox.classList.remove('show');
 
-  const RATE = 15, MIN = 15, CUSTOMS = 5, RATE_KES = 135;
-  let totalFreight = 0;
-  let totalCustoms = 0;
+  // ── RATES ──
+  const AIR_RATE    = 18;   // $18/kg
+  const CUSTOMS_RATE = 5;   // $5/kg
+  const VERIFY_FEE  = 7;    // $7/shipment flat
+  const PROT_RATE   = 0.05; // 5% of declared value
+  const PROT_MIN    = 5;    // $5 minimum
+  const RATE_KES    = 135;
 
+  // ── Per-item calculation ──
+  let totalChargeable = 0;
   const calcs = pkgs.map(p => {
     const vol = (p.L * p.W * p.H) / 366;
     const chg = Math.max(p.wt, vol);
-    const freight = Math.max(chg * RATE, MIN);
-    totalFreight += freight;
-    totalCustoms += CUSTOMS;
-    return {...p, vol, chg, freight};
+    totalChargeable += chg;
+    return {...p, vol, chg};
   });
 
-  const hasDeliv = document.getElementById('homeDelivery').checked;
-  const totalUsd = totalFreight + totalCustoms;
-  const totalKes = totalUsd * RATE_KES + (hasDeliv ? 450 : 0);
+  // ── Cost components ──
+  const airFreight   = totalChargeable * AIR_RATE;
+  const customs      = totalChargeable * CUSTOMS_RATE;
+  const verify       = VERIFY_FEE;
+  const protection   = Math.max(declaredVal * PROT_RATE, PROT_MIN);
+  const hasDeliv     = document.getElementById('homeDelivery').checked;
+  const delivFee     = hasDeliv ? (450 / RATE_KES) : 0; // convert KES to USD for subtotal
+  const subtotalUsd  = airFreight + customs + verify + protection;
+  const totalUsd     = subtotalUsd + delivFee;
+  const totalKes     = totalUsd * RATE_KES + (hasDeliv ? 0 : 0); // already included
 
-  // Render per-item results
+  // ── Render per-item breakdown ──
   const pkgEl = document.getElementById('pkgResultsEl');
   pkgEl.innerHTML = '';
   calcs.forEach(p => {
@@ -2259,40 +2403,44 @@ function calculate() {
     d.className = 'pkg-result-card';
     const pkgTitle = 'Item ' + p.rid + (p.iname ? ' — ' + p.iname : '') + (p.tk ? ' &nbsp;·&nbsp; ' + p.tk : '');
     const pkgMeta  = [p.store ? '🏪 ' + p.store : '', p.desc ? '📝 ' + p.desc : ''].filter(Boolean).join(' &nbsp;·&nbsp; ');
-    d.innerHTML = '<div class="pkg-result-label">' + pkgTitle + '</div>' +
+    d.innerHTML =
+      '<div class="pkg-result-label">' + pkgTitle + '</div>' +
       (pkgMeta ? '<div style="font-size:11px;color:var(--text3);margin-bottom:8px;">' + pkgMeta + '</div>' : '') +
       '<div class="pkg-result-grid">' +
-        '<div class="prg-item"><div class="prg-l">Vol. Weight</div><div class="prg-v">'  + p.vol.toFixed(2)     + ' kg</div></div>' +
-        '<div class="prg-item"><div class="prg-l">Chargeable</div><div class="prg-v hl">' + p.chg.toFixed(2)   + ' kg</div></div>' +
-        '<div class="prg-item"><div class="prg-l">Freight</div><div class="prg-v">$'      + p.freight.toFixed(2) + '</div></div>' +
+        '<div class="prg-item"><div class="prg-l">Actual Weight</div><div class="prg-v">' + p.wt.toFixed(2) + ' kg</div></div>' +
+        '<div class="prg-item"><div class="prg-l">Vol. Weight</div><div class="prg-v">' + p.vol.toFixed(2) + ' kg</div></div>' +
+        '<div class="prg-item"><div class="prg-l">Chargeable</div><div class="prg-v hl">' + p.chg.toFixed(2) + ' kg</div></div>' +
       '</div>';
     pkgEl.appendChild(d);
   });
 
-  // Summary rows
+  // ── Summary ──
   const client = document.getElementById('clientName').value.trim();
   document.getElementById('resultsTitle').textContent = client ? 'Quote for ' + client : 'Cost Breakdown';
-  document.getElementById('r-customs').textContent = pkgs.length > 1
-    ? '$' + totalCustoms.toFixed(2) + ' (' + pkgs.length + ' × $5.00)'
-    : '$5.00';
-  document.getElementById('r-del').textContent  = hasDeliv ? 'KES 450' : 'Not included';
-  document.getElementById('r-usd').textContent  = '$' + totalUsd.toFixed(2);
-  document.getElementById('r-kes').textContent  = 'KES ' + fmtKES(totalKes);
+
+  // Update summary rows
+  document.getElementById('r-air').textContent      = totalChargeable.toFixed(2) + ' kg × $18 = $' + airFreight.toFixed(2);
+  document.getElementById('r-customs').textContent  = totalChargeable.toFixed(2) + ' kg × $5 = $' + customs.toFixed(2);
+  document.getElementById('r-verify').textContent   = '$' + verify.toFixed(2);
+  document.getElementById('r-protect').textContent  = '$' + declaredVal.toFixed(0) + ' × 5% = $' + protection.toFixed(2) + (protection === PROT_MIN && declaredVal * PROT_RATE < PROT_MIN ? ' (min)' : '');
+  document.getElementById('r-del').textContent      = hasDeliv ? 'KES 450' : 'Not included';
+  document.getElementById('r-usd').textContent      = '$' + totalUsd.toFixed(2);
+  document.getElementById('r-kes').textContent      = 'KES ' + fmtKES(Math.round(totalUsd * RATE_KES) + (hasDeliv ? 450 : 0));
 
   lastTotalUsd = totalUsd;
-  lastTotalKes = totalKes;
+  lastTotalKes = Math.round(totalUsd * RATE_KES) + (hasDeliv ? 450 : 0);
   setCurrency(activeCurrency);
   resultsWrap.classList.add('show');
 
-  // Estimated arrival
+  // ── Estimated arrival ──
   const today    = new Date();
   const todayDay = today.getDay();
   let daysToWed;
-  if (todayDay === 0) daysToWed = 3;
+  if      (todayDay === 0) daysToWed = 3;
   else if (todayDay === 1) daysToWed = 2;
   else if (todayDay === 2) daysToWed = 1;
   else if (todayDay === 6) daysToWed = 4;
-  else daysToWed = (3 - todayDay + 7) % 7 || 7;
+  else                     daysToWed = (3 - todayDay + 7) % 7 || 7;
 
   const dispatchDate = new Date(today);
   dispatchDate.setDate(today.getDate() + daysToWed);
@@ -2310,13 +2458,11 @@ function calculate() {
 
   const earlyDate = addBizDays(dispatchDate, 7);
   const lateDate  = addBizDays(dispatchDate, 15);
-
   function fmtD(d) { return d.toLocaleDateString('en-KE', {day:'numeric', month:'short', year:'numeric'}); }
   function fmtS(d) { return d.toLocaleDateString('en-KE', {day:'numeric', month:'short'}); }
 
   const existing = document.getElementById('etaBanner');
   if (existing) existing.remove();
-
   const eta = document.createElement('div');
   eta.id = 'etaBanner';
   eta.style.cssText = 'margin-top:12px;padding:14px 16px;background:linear-gradient(135deg,rgba(13,31,60,0.8),rgba(26,47,80,0.8));border:1px solid rgba(255,255,255,0.08);border-left:3px solid var(--orange);border-radius:var(--r-sm);font-size:13px;line-height:1.8;';
@@ -2326,10 +2472,9 @@ function calculate() {
     (todayDay === 3 ? ' <span style="font-size:10px;color:var(--muted);">(Wed arrivals not guaranteed same week)</span>' : '') + '</div>' +
     '<div style="color:var(--text);margin-top:4px;">🇰🇪 <strong>Estimated Arrival:</strong> <span style="color:var(--orange2);font-weight:700;">' + fmtS(earlyDate) + ' – ' + fmtD(lateDate) + '</span></div>' +
     '<div style="font-size:11px;color:var(--muted);margin-top:6px;">⏱️ 7–15 business days from dispatch · Weekends excluded · Subject to customs clearance</div>';
-
   resultsWrap.appendChild(eta);
 
-  document.getElementById('consolBanner').style.display = 'block';
+  document.getElementById('consolBanner').style.display  = 'block';
   document.getElementById('referralBanner').style.display = 'block';
   setTimeout(() => resultsWrap.scrollIntoView({behavior:'smooth', block:'nearest'}), 60);
 }
@@ -2570,7 +2715,7 @@ setCurrency('KES');
 
 <script>
 const FAQ = [
-  { keys:['air freight rate','rate per kg','how much per kg','price per kg','cost per kg','air cost','air price','air rate','$15'], a:`Our air freight rate is **$15 per kg** — based on whichever is higher between actual weight and volumetric weight.<br><br>📦 Volumetric weight = (L × W × H in inches) ÷ 366<br>💵 Minimum charge: $15<br>🛃 Customs clearance: +$5 per shipment<br>💱 Exchange rate: KES 135 per USD` },
+  { keys:['air freight rate','rate per kg','how much per kg','price per kg','cost per kg','air cost','air price','air rate','$15'], a:`Our air freight rate is **$18 per kg** — based on whichever is higher between actual weight and volumetric weight.<br><br>📦 Volumetric weight = (L × W × H in inches) ÷ 366<br>💵 Minimum charge: see calculator<br>🛃 Customs clearance: +$5 per shipment<br>💱 Exchange rate: KES 135 per USD` },
   { keys:['address','us address','warehouse','ship to','huntington','shipping address','where to ship','where do i ship'], a:`📍 To get your personal US shipping address, scroll up to the <strong>"Get Your US Shipping Address"</strong> section.<br><br>Simply enter your <strong>full name + WhatsApp number</strong> and click <strong>"Get My Shipping Address"</strong> — your address will be revealed instantly with your name pre-filled! 🔓` },
   { keys:['how long','delivery time','transit time','days','weeks','how many days','shipping time','when will','air freight time'], a:`✈️ Air freight typically takes **7–14 days** after we receive your package at our US warehouse.<br><br>🚢 Ocean shipping takes **75–120 days** — but is much cheaper for heavy or bulky items.` },
   { keys:['ocean','sea freight','ocean shipping','ocean rate','sea shipping','container','barrel','tv shipping','how much for tv'], a:`🚢 Ocean shipping is priced at **$33 per cubic foot** — all-inclusive with customs.<br><br>Popular items:<br>• 55" TV → $225<br>• 65" TV → $285<br>• 75" TV → $435<br>• 85" TV → $650<br>• 55 Gallon Barrel → $330<br><br>Minimum charge: $135 · Delivery: 75–120 days` },
@@ -2579,7 +2724,7 @@ const FAQ = [
   { keys:['vape','vapes','vape pen','vape juice','e-cigarette'], a:`❌ **No.** Vape pens, vape juice, and all vaping accessories are **strictly prohibited** and cannot be shipped.` },
   { keys:['medicine','medication','prescription','pills','drugs','supplements','protein','vitamins'], a:`💊 **Medication** (OTC and prescription) is **prohibited** — we cannot ship medicines.<br><br>✅ **Supplements & protein powders** are allowed but **factory sealed in original packaging only.** Opened containers are not accepted.` },
   { keys:['perfume','cologne','fragrance'], a:`✅ **Yes** — perfumes are allowed, but **factory sealed in original packaging only.** Opened bottles are not accepted.` },
-  { keys:['consolidation','consolidate','combine','merge packages','multiple packages','bundle shipment'], a:`✅ **Yes!** MRAN offers consolidation for small non-hazardous items.<br><br>📦 Eligible: Hair & beauty · Books · Clothing · Skincare · Supplements · Toys · Home goods<br><br>WhatsApp us to arrange: **+254 758 663 108**` },
+  { keys:['consolidation','consolidate','combine','merge packages','multiple packages','bundle shipment'], a:`✅ **Yes!** MRAN offers consolidation for small non-hazardous items.<br><br>📦 Eligible: Hair & beauty · Books · Clothing · Skincare · Supplements · Toys · Home goods<br><br>📦 **Verify & Consolidate fee:** $7/shipment (flat fee, not per kg)<br><br>WhatsApp us to arrange: **+254 758 663 108**` },
   { keys:['home delivery','deliver to my house','door to door','deliver nairobi','nairobi delivery'], a:`🏠 Yes! We offer **home delivery within Nairobi** for an additional **KES 450.**<br><br>Select this option in our shipping calculator on this page.` },
   { keys:['calculate','calculator','estimate','how much will','cost calculator','shipping cost'], a:`🧮 Use our **shipping calculator** on this page!<br><br>1. Click the ✈️ Air Freight tab<br>2. Enter package dimensions (inches) and weight (kg)<br>3. Hit "Calculate Shipping Cost"<br><br>It instantly shows your USD and KES total.` },
   { keys:['how does it work','how to ship','process','steps','get started','how do i start','how to use'], a:`Here's how it works:<br><br>1️⃣ Enter your name & WhatsApp in the <strong>"Get Your US Shipping Address"</strong> section to unlock your address<br>2️⃣ Shop at any US store online and ship to your MRAN US address<br>3️⃣ We receive your package and notify you<br>4️⃣ Pay your shipping invoice<br>5️⃣ Your package ships to Kenya within 7–15 business days ✈️🇰🇪` },
@@ -2589,7 +2734,7 @@ const FAQ = [
     a:`📞 **WhatsApp:** +254 758 663 108<br><br>WhatsApp is fastest — we usually reply within minutes! 💬` },
   { keys:['pay','payment','mpesa','m-pesa','till','how to pay','till number','lipa','buy goods'],
     a:`💳 <strong>Payment via M-Pesa Till Number:</strong><br><br>1️⃣ Go to M-Pesa → Lipa na M-Pesa<br>2️⃣ Select <strong>Buy Goods & Services</strong><br>3️⃣ Enter Till Number: <strong>6798004</strong><br>4️⃣ Enter your KES amount<br>5️⃣ Enter M-Pesa PIN & confirm<br>6️⃣ Send the M-Pesa SMS to WhatsApp: <strong>+254 758 663 108</strong><br><br>⚠️ Please pay immediately after receiving your invoice.` },
-  { keys:['customs','customs clearance','duty','tax','import','kra'], a:`🛃 We handle customs clearance for you!<br><br>• <strong>$5 customs clearance fee per package</strong><br>• 1 package = $5 · 2 packages = $10 · 3 packages = $15<br>• Items that are consolidated ship as one package = $5 total<br><br>You don't need to deal with KRA — MRAN handles it all.` },
+  { keys:['customs','customs clearance','duty','tax','import','kra'], a:`🛃 We handle customs clearance for you!<br><br>• <strong>$5/kg customs clearance</strong><br>• $5/kg based on chargeable weight<br>• Items that are consolidated ship as one package = $5 total<br><br>You don't need to deal with KRA — MRAN handles it all.` },
   { keys:['volumetric','volumetric weight','dimensional weight','chargeable weight'], a:`📐 **Volumetric weight** accounts for the space your package takes up.<br><br>Formula: **(L × W × H in inches) ÷ 366**<br><br>The **chargeable weight** is whichever is higher — actual or volumetric. Airlines always bill the greater of the two.` },
   { keys:['tracking','track my package','track shipment','where is my package','track order','track'],
     a:`📦 <strong>Tracking your shipment:</strong><br><br>🇺🇸 <strong>Leg 1 — Store to our US Warehouse:</strong><br>Use the <strong>"Track My Package"</strong> section on this page. Enter your tracking number and we'll redirect you to the right carrier.<br><br>🇰🇪 <strong>Leg 2 — US to Kenya:</strong><br>Once your package leaves our warehouse, standard tracking stops. But we'll notify you via WhatsApp at every step: Received → Ready → Shipped → Arrived. 🚀` },
